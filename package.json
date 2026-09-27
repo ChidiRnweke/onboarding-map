@@ -60,6 +60,8 @@
     "citty": "^0.2.2"
   },
   "devDependencies": {
+    "@commitlint/cli": "^21.2.3",
+    "@commitlint/config-conventional": "^21.2.3",
     "@eslint/js": "^10.0.1",
     "@fontsource-variable/archivo": "^5.3.0",
     "@fontsource-variable/newsreader": "^5.3.0",
