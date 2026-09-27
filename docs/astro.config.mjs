@@ -72,6 +72,7 @@ export default defineConfig({
             'user-guide/authoring-a-map',
             'user-guide/examples',
             'user-guide/working-with-your-agent',
+            'user-guide/the-assistant',
           ],
         },
         {

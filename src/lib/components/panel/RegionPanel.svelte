@@ -8,6 +8,7 @@
   import NodeChip from '../ui/NodeChip.svelte';
   import PanelHeader from '../ui/PanelHeader.svelte';
   import PanelSection from '../ui/PanelSection.svelte';
+  import AgentHere from '../agent/AgentHere.svelte';
 
   // One region of the map, opened from its name on the rim or from a
   // concept's breadcrumb: what it is about, what of it the route visits and
@@ -85,6 +86,7 @@
 {#if domain.summary}
   <p class="type-body m-0 mt-3 text-ink-2"><Markup text={domain.summary} /></p>
 {/if}
+<AgentHere anchor={{ kind: 'region', id }} title={domain.label} />
 
 {#if byStage.length}
   <PanelSection heading={labels.region.route}>

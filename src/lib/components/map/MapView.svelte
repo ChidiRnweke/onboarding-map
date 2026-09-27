@@ -8,6 +8,7 @@
   import RadialMap from './RadialMap.svelte';
   import ViewSwitch from './ViewSwitch.svelte';
   import ZoomControls from './ZoomControls.svelte';
+  import MapCaption from '../agent/MapCaption.svelte';
 
   const app = getAppState();
 
@@ -55,6 +56,7 @@
   <div
     class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-start px-[20px] pr-[70px] pb-[18px] max-md:px-[10px] max-md:pr-[60px] max-md:pb-[10px]"
   >
+    <MapCaption />
     <Journey />
   </div>
   <div class="absolute right-[18px] bottom-[18px] max-md:right-[10px] max-md:bottom-[10px]">

@@ -44,6 +44,8 @@ Two layers, kept apart.
 
 **Provenance**: `documents` lists the source material (`id`, `title`, `date`, `url`, optional `reviewed`); `refs: [{ doc, slides? }]` on nodes, stages and modules point into it. The `ref(doc, ...slides)` helper writes them. When content comes from a document, cite it — `audit` uses this to find stale content.
 
+**Assistant**: every map has an agent that helps learners: it explains a step, a concept, a connection or a region where they are looking, checks a step's note when asked, and points at the map. Learners bring their own key; nothing in the map is secret. Set `assistant: { enabled: false }` only if the author does not want it. Optional presets: `provider` (`openrouter`, `anthropic`, `openai`, `google`, `azure`, `ollama`, `lmstudio`, `custom`), `model` (Azure: the deployment name), `baseURL` (needed for `azure` and `custom`), `instructions` (house rules for the model), `keyless` (an organisation proxy at `baseURL` holds the key). The better the `summary`, `task`, `checkpoint`, step `nodes` and domain `summary`, the better its answers: it reads the map, not the web.
+
 **Labels**: interface copy. Everything has English defaults; set only what differs for this audience (`period: 'Week'`, `tip: { label: 'Ask Copilot' }`, `intro`).
 
 ## Conventions that make a good map

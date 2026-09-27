@@ -1,0 +1,94 @@
+---
+title: The assistant
+description: An agent that helps learners along the route, on the model they bring. Every map has one; where it appears, what it can do on the map, and how to set up each provider.
+---
+
+import ProviderGuide from '../../../components/ProviderGuide.astro';
+
+Every map has an assistant: an agent that helps the learner while they walk the route. It is not a
+chat window off to the side. It is offered on the thing it would act on, and it answers right there:
+
+| Where                           | Action                     | What it does                                                                 |
+| ------------------------------- | -------------------------- | ---------------------------------------------------------------------------- |
+| The step in hand (Do, Observe)  | **Walk me through it**     | Says what to do and what to see, and lights up the concepts the step touches. |
+| A step's note, once written     | **Check what I noticed**   | Says whether the learner's observation matches what the step should show.   |
+| A concept                       | **Explain for this stage** | What the concept is for in the task in hand, not in general.                 |
+| Each of a concept's connections | **Explain connection**     | Why the one relates to the other, and what that means in practice.           |
+| A region of the map             | **Summarise this region**  | What it covers, what on the route passes through it, what can wait.         |
+| The reading                     | **What to take away**      | The two or three things from the reading the stage needs.                    |
+| The checkpoint                  | **Check my understanding** | Asks a few questions, one at a time, and says whether each answer holds.     |
+| A goal part                     | **How does this fit?**     | What it is built from, and which stages build it.                            |
+| The compass next to the theme   | **Ask about the map**      | A free question, with the learner's position already known.                  |
+
+Every answer can be followed up in place, and each place remembers what was asked there.
+
+## It acts on the map
+
+The assistant uses the map the way the learner does. It can **point at** concepts, which lights them
+up with a caption saying why; **open** a concept to read next; and **go to** a stage when asked.
+Each answer lists what it touched ("Opened · Velocity"), and a move comes with **Back to where you
+were**. When an answer takes the learner to another concept, the answer comes along, above it.
+
+Progress is the learner's. The assistant can offer to mark a concept read or move on to the next
+step; the learner answers **Yes** or **Not now**. It never writes in the learner's notes.
+
+Answers say which model wrote them, so they are never taken for the map's own text. A learner's
+note is sent to the model only when they press **Check what I noticed**, and only that note.
+
+## Turn it off, or preset it
+
+Every map has the assistant; each learner picks a provider the first time they ask for help. To
+turn it off for a map:
+
+```ts
+export default defineMap({
+  // …
+  assistant: { enabled: false },
+});
+```
+
+Everything in it is optional and none of it is secret:
+
+| Field          | Holds                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------- |
+| `enabled`      | `false` turns the assistant off for this map. Default: on.                                     |
+| `provider`     | The provider offered first: `openrouter`, `anthropic`, `openai`, `google`, `azure`, `ollama`, `lmstudio`, `custom`. |
+| `model`        | The model id to start with; for Azure, the deployment name.                                    |
+| `baseURL`      | Azure resource URL, a local server, or your organisation's OpenAI-compatible proxy.            |
+| `instructions` | Said to the model before anything else: house rules, tone, what not to do.                     |
+| `keyless`      | The proxy at `baseURL` holds the key; learners are never asked for one.                        |
+
+`validate` checks the block: an unknown provider, a `baseURL` that is not a URL, Azure without its
+URL and deployment name, or `enabled`/`keyless` that are not `true` or `false` are errors with an
+`assistant.*` path.
+
+## Keys stay with the learner
+
+The page calls the provider straight from the learner's browser; there is no server in between. A key
+is kept in that browser (on the device, or only for the session, as the learner chooses) and is sent
+only to the provider it belongs to. A map is a static site, so there is nowhere else for it to go.
+
+If your organisation does not hand out keys, run an OpenAI-compatible proxy that holds one and point
+the map at it:
+
+```ts
+assistant: {
+  provider: 'custom',
+  baseURL: 'https://ai-gateway.example.com/v1',
+  model: 'gpt-5-mini',
+  keyless: true,
+},
+```
+
+## Setting up a provider
+
+This is the same guidance the learner sees in the map when they first ask for help.
+
+<ProviderGuide />
+
+## Which models work
+
+The assistant calls tools (pointing at the map, opening concepts), so the model must support tool
+calling. Small local models follow the map less well; the larger the better.
+
+It answers from the map and the model's own knowledge. It does not search the web.
