@@ -2,6 +2,7 @@
   import { getAppState } from '$lib/state.svelte';
   import YouAreHere from '../goal/YouAreHere.svelte';
   import SidebarToggle from '../layout/SidebarToggle.svelte';
+  import Attribution from './Attribution.svelte';
   import Journey from './Journey.svelte';
   import MapLegend from './MapLegend.svelte';
   import RadialMap from './RadialMap.svelte';
@@ -52,8 +53,11 @@
   </div>
 
   <div
-    class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-start px-[20px] pb-[18px] max-md:px-[10px] max-md:pb-[10px]"
+    class="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-start px-[20px] pr-[70px] pb-[18px] max-md:px-[10px] max-md:pr-[60px] max-md:pb-[10px]"
   >
     <Journey />
+  </div>
+  <div class="absolute right-[18px] bottom-[18px] max-md:right-[10px] max-md:bottom-[10px]">
+    <Attribution />
   </div>
 </section>
