@@ -1,0 +1,70 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .bg {
+      fill: #e4e9e2;
+    }
+    .ring {
+      fill: none;
+      stroke: #d3dbd3;
+      stroke-width: 1.4;
+    }
+    .route {
+      fill: none;
+      stroke: #2436c4;
+      stroke-width: 3;
+      stroke-linecap: round;
+    }
+    .node-done {
+      fill: #2436c4;
+      stroke: #e4e9e2;
+      stroke-width: 1.2;
+    }
+    .node-ahead {
+      fill: #e4e9e2;
+      stroke: #8d9a98;
+      stroke-width: 1.4;
+    }
+    .hub-ring {
+      fill: #e4e9e2;
+      stroke: #2436c4;
+      stroke-width: 1.6;
+    }
+    .hub-dot {
+      fill: #2436c4;
+    }
+    @media (prefers-color-scheme: dark) {
+      .bg {
+        fill: #0f1c21;
+      }
+      .ring {
+        stroke: #1d3137;
+      }
+      .route {
+        stroke: #9db0ff;
+      }
+      .node-done {
+        fill: #9db0ff;
+        stroke: #0f1c21;
+      }
+      .node-ahead {
+        fill: #0f1c21;
+        stroke: #5f7474;
+      }
+      .hub-ring {
+        fill: #0f1c21;
+        stroke: #9db0ff;
+      }
+      .hub-dot {
+        fill: #9db0ff;
+      }
+    }
+  </style>
+  <rect class="bg" x="2" y="2" width="60" height="60" rx="13" ry="13" />
+  <circle class="ring" cx="32" cy="32" r="25" />
+  <path class="route" d="M32,32 L41.5,48.45 Q51.9,43.5 51,32 Q51.9,20.5 41.5,15.55" />
+  <circle class="node-done" cx="41.5" cy="48.45" r="3.3" />
+  <circle class="node-done" cx="51" cy="32" r="3.6" />
+  <circle class="node-ahead" cx="41.5" cy="15.55" r="3.2" />
+  <circle class="hub-ring" cx="32" cy="32" r="5" />
+  <circle class="hub-dot" cx="32" cy="32" r="2" />
+</svg>
