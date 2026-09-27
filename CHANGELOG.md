@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/ChidiRnweke/onboarding-map/compare/v0.5.0...v0.6.0) (2026-09-27)
+
+
+### Features
+
+* **app:** add an assistant that lives in the map, on the learner's own model ([#16](https://github.com/ChidiRnweke/onboarding-map/issues/16)) ([a9ad466](https://github.com/ChidiRnweke/onboarding-map/commit/a9ad4660257ec1fb71235ec76f3df64c2378e96d))
+
 ## [0.5.0](https://github.com/ChidiRnweke/onboarding-map/compare/v0.4.0...v0.5.0) (2026-09-27)
 
 
