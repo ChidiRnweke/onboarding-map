@@ -1,32 +1,33 @@
 ---
 title: Why an onboarding map
-description: The problem it solves, and the idea behind the map.
+description: Give a newcomer both the lay of the land and a clear first route through it.
 ---
 
-Everything a newcomer needs is already written down — a wiki, a repository, a folder of recorded
-calls — but as separate documents for people who know the system. It explains how things work; it
-doesn't say where to start, what matters this week, or what can wait.
+Your team already has the information: a repository, a wiki, design notes, recorded decisions. The
+newcomer still has to work out where to begin and which parts matter now.
 
-onboarding-map makes the map the easy part. You describe your subject in one file: the things a
-newcomer will meet, and one path through them. Write it yourself, or hand your notes, slides and
-docs to a coding agent and let it draft it — the skills in this package tell it how.
+An onboarding map answers two questions at once: **what is here?** and **what should I do first?**
+It shows the subject as a territory, then marks one route through it in stages. The newcomer can
+follow that route without mistaking it for everything there is to learn.
 
 ![An onboarding map for a cloud team: regions of the map around a centre, the route of the first stage highlighted, and the stage panel with the goal as a diagram](/screenshot.png)
 
-## Why not just a reading list
+## A route with its surroundings
 
-A reading list gives an order but no surroundings. A wiki gives surroundings but no order. A map of
-a subject does both at once: the newcomer sees everything that exists, so nothing feels hidden, and
-follows a single path through it, so they never have to decide what to learn next.
+A reading list gives an order, but not the context around each topic. A wiki gives context, but not
+an order to follow. The map keeps both: items on the route, nearby things worth recognising, and
+alternatives the team chose not to use.
 
-## What you get
+The data is one file, usually `map.ts`. The full file can be long; you can give your source material
+to a coding agent and let the installed skills guide it through the draft and later edits. The
+package turns that file into a static site.
 
-A static site you can send to the newcomer. There is no server and no account; their progress, notes
-and place in the map are kept in their own browser.
+The learner opens the site in a browser. Their place in the route and their notes stay in that
+browser; the site needs no application server.
 
 :::tip
-The fastest way to understand it is to look at one. The [examples](/user-guide/examples/) show two
-maps next to the files that made them.
+See the [examples](/user-guide/examples/) to explore a map and its data file, then
+[get started](/user-guide/getting-started/) with your own material.
 :::
 
 Next: [how it works](/user-guide/how-it-works/).

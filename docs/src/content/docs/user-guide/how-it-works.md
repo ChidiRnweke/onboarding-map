@@ -1,51 +1,72 @@
 ---
 title: How it works
-description: Everything the newcomer will meet, one path through it, and the order they walk it in.
+description: One data file describes the territory, the route through it, and what each stage asks the learner to do.
 ---
 
-A map is three things: the whole picture, one path through it, and the order the newcomer walks that
-path in.
+The map's data lives in one file: `map.ts` or `map.json`. It describes the subject and the route a
+newcomer takes through it. The renderer turns that data into the map site.
 
-## The whole picture
+The file can grow long because it holds the whole territory, not just a lesson plan. Most people
+will get a coding agent to draft and maintain it; [the skills](/user-guide/working-with-your-agent/)
+teach the agent the model and the checks.
 
-Everything the newcomer will run into is on the map, grouped into regions. Each item is one of three
-things:
+## The territory: regions and items
 
-- **On the route** — they use it during the onboarding.
-- **Good to know it exists** — off the route, but shown so the map is honest about what is out there.
-- **A choice we did not take** — the tool or approach the team compared and set aside, with the
-  reason.
+`domains` are the map's regions. Each region contains categories and items. You choose the item
+`kinds` that fit your subject: the Physics example uses concepts, laws and methods; a software map
+might use tools and practices. `category` is built in and groups items inside a region.
 
-Off-route items cost nothing to add and stop the newcomer wondering what they are missing.
+Each item also has a `status` that says how it relates to the route:
 
-## One path
+- **`path`** — the learner uses it during onboarding. It belongs to a stage.
+- **`context`** — it is useful to know the item exists, but it is not on the route.
+- **`alternative`** — it is a real option the team considered and did not choose. Link it to the
+  path item it could replace, and explain why it was not picked.
 
-One route runs through the whole picture. The newcomer follows it; everything else is there to
-recognise, not to learn first. This is the part that stops a map from becoming another pile.
+`edges` connect items that relate across categories or regions. Items can also carry explanations,
+documentation links and source references.
 
-The route is cut into stages, each with a single idea and a clear end. A stage's ending is something
-the newcomer can show, not a feeling: a command that ran, a page that opened, a change that merged.
+Here is a short excerpt from a map of mechanics:
 
-## Do, then observe, then read
+```ts
+nodes: [
+  {
+    id: 'velocity', label: 'Velocity', domain: 'kinematics', kind: 'concept',
+    parent: 'motion', status: 'path', stage: 'describe',
+    summary: 'How fast position changes, and in which direction.',
+  },
+]
+```
 
-Inside a stage the order is always the same:
+The same file can mark another item `status: 'context'` or `status: 'alternative'`. Those distinctions
+show the learner what they will use now, what is nearby, and what the team chose instead.
 
-1. **Do** something.
+![The Physics map shows its regions and items around a centre, with the first route highlighted and the stage panel open.](/guide/physics-map-overview.png)
+
+_Physics example: the whole territory, with the first stage highlighted._
+
+The map shows the whole territory at once. The route makes the next few steps visible without
+turning every item into a lesson.
+
+## The journey: stages and steps
+
+The `stages` field describes the route in order. A stage names one outcome, points to a few route
+items, and gives the learner a checkpoint they can demonstrate.
+
+Every stage follows the same sequence:
+
+1. **Do** something with the subject.
 2. **Observe** what happened.
-3. **Read** about it, now that there is something to attach the reading to.
+3. **Read** the relevant material after there is something to connect it to.
 
-It is the reverse of how documentation is usually met. A short explanation lands better once the
-newcomer has seen the thing it is about.
+![The Physics map with the first stage open on its first Do step; the map zooms to the concepts used in the task.](/guide/physics-map-stage.png)
 
-## The goal
+_Physics example: the first Do step, with the map focused on the concepts it uses._
 
-The stages add up to something: the goal. It is the finished thing the journey builds, shown as
-parts that fill in as the stages go. A newcomer can always see how far they are and what is left.
+The `goal` is optional. When present, it describes the finished result in modules and shows how
+stages build it. `periods` group stages into days, weeks or another span that fits the onboarding.
 
-:::note
-In the map file these ideas have short names — `path`, `context`, `alternative`, `stage`, `goal`.
-You do not need them to write a map; [the model reference](/reference/model/) lists them for when
-you do.
-:::
+These names are the main pieces of the data model. The [model reference](/reference/model/) lists
+their fields; [examples](/user-guide/examples/) show full maps alongside their data.
 
 Next: [get started](/user-guide/getting-started/).

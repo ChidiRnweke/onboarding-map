@@ -131,10 +131,11 @@ header.header {
   text-decoration-color: var(--route);
 }
 
-/* Current page in the sidebar wears the route colour, not Starlight's blue. */
+/* The route colour is also the current-page background. Use the inverted
+   foreground so the selected link stays readable in both themes. */
 .sidebar-content a[aria-current='page'],
 .sidebar-content a[aria-current='page']:hover {
-  color: var(--route);
+  color: var(--sl-color-text-invert);
 }
 .sidebar-content a[aria-current='page']::before {
   background-color: var(--route);
@@ -153,9 +154,20 @@ header.header {
   border-color: var(--rule);
 }
 
-/* Asides and cards get the app's radii and hairline. */
+/* Callouts use the same quiet, fully bordered panel as cards in the app. Keep
+   their content and icon neutral instead of using Starlight's colored stripe. */
 .starlight-aside {
+  --sl-color-asides-bg: var(--panel);
+  --sl-color-asides-border: var(--rule);
+  --sl-color-asides-text: var(--ink);
+  --sl-color-asides-text-accent: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--rule);
   border-radius: var(--radius-lg);
+  color: var(--ink);
+}
+.starlight-aside__title {
+  color: var(--ink);
 }
 .card {
   border-radius: var(--radius-lg);

@@ -9,21 +9,26 @@ The package installs one command, `onboarding-map` (or `npx onboarding-map`).
 
 | Command          | What it does                                                                                                        |
 | ---------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `init [dir]`     | Start a project: `map.ts`, config, `package.json`, agent skills. `--template starter\|physics` (default `starter`). |
-| `dev`            | Serve the map; reload on save; list validation problems in the page. `--port` (default `4321`).                     |
-| `build`          | Validate and write a static site to `./dist` (`map.json` + the app). `--out <dir>` to change the folder.            |
+| `init [dir]`     | Start a project with `map.ts`, config, `package.json` and skills. `--template starter\|physics`; `--target` chooses where to install the skills. |
+| `dev`            | Serve the map; reload on save and list validation problems in the page. `--port` defaults to `4321`.                                      |
+| `build`          | Validate and write a static site to `./dist` (`map.json` and the app). `--out <dir>` changes the output folder.                           |
 | `validate`       | Check every reference; exit 1 on errors.                                                                            |
 | `changelog`      | What changed since a git revision, as Markdown for review. `--against <rev>` (default `HEAD`), `--out <file>`.      |
 | `audit`          | Stale or unfinished content. `--check-urls` also requests every link (slow).                                        |
 | `schema`         | Print the JSON Schema for `map.json` files.                                                                         |
-| `skills install` | (Re)install the agent skills into your project. `--target claude,agents,codex\|all\|none`.                          |
+| `skills install` | Install or update the agent skills. `--target` chooses where to install them.                                                               |
 
 ## Common options
 
 - `--map <file>` — the map file. Defaults to the one named in `onboarding-map.config.json`, else the
   first of `map.ts`, `map.json`, `map.js`.
+- `--target <targets>` — `claude`, `agents`, `codex`, a comma-separated list, `all` or `none`. If
+  omitted in a terminal, `init` and `skills install` ask where to put the skills; in a non-interactive
+  shell, pass the flag.
+- `--port <port>` — the `dev` server port.
+- `--out <dir>` — the `build` output folder.
 - `--json` — machine-readable output, for scripts and agents. Supported by `validate`, `changelog`
-  and `audit`.
+  and `audit`. `audit --check-urls` also checks documentation links over the network.
 
 ## Problems carry a path
 
