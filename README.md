@@ -2,13 +2,17 @@
 
 An onboarding map for any subject: a radial map of everything a newcomer will meet, with one highlighted route through it, walked in stages of _do → observe → read_. You bring the content as one file; the package renders it as a static site.
 
+![An onboarding map for a cloud team: regions of the map around a centre, the route of the first stage highlighted, and the stage panel with the goal as a diagram](https://raw.githubusercontent.com/ChidiRnweke/onboarding-map/main/docs/screenshot.png)
+
 You don't need a CMS: your coding agent writes and maintains the map, using skills this package installs, and the CLI checks its work.
 
 ```sh
-npx onboarding-map init my-map            # or --template physics
+npx onboarding-map init my-map            # asks which coding agents get the skills; or --target, --template physics
 cd my-map && npm install
 npx onboarding-map dev                    # http://localhost:4321, reloads on save
 ```
+
+The skills go where your agent looks for them: `--target claude` (`.claude/skills`, Claude Code), `agents` (`.agents/skills`, Codex and other tools following the Agent Skills standard), `codex` (`.codex/skills`, Codex's older path), a comma list of these, `all` or `none`. Without `--target` the CLI asks; in a non-interactive shell it needs the flag.
 
 Then ask your agent, e.g. _“turn these notes into an onboarding map”_ or _“refresh the stale content”_.
 
@@ -23,7 +27,7 @@ Then ask your agent, e.g. _“turn these notes into an onboarding map”_ or _�
 | `changelog`      | What changed since a git revision (`--against`, default `HEAD`), as Markdown for review                             |
 | `audit`          | Stale or unfinished content: `TODO` links, missing sources, updated source documents; `--check-urls` for dead links |
 | `schema`         | The JSON Schema, for `map.json` files                                                                               |
-| `skills install` | (Re)install the agent skills into `.claude/skills/` and `AGENTS.md`                                                 |
+| `skills install` | (Re)install the agent skills (`--target`, as for `init`) and point to them from `AGENTS.md`                         |
 
 `validate`, `changelog` and `audit` take `--json`. Every problem has a `path` (`nodes.git`, `stages.setup`) so an agent can find what to fix.
 

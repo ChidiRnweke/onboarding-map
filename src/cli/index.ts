@@ -10,6 +10,7 @@ import { check, deriveChecked, type CheckResult } from './check.ts';
 import { APP_DIR, resolveConfig, SCHEMA_FILE, VERSION } from './paths.ts';
 import { init, installSkills, TEMPLATES } from './scaffold.ts';
 import { serve } from './serve.ts';
+import { resolveTargets, SKILL_TARGETS, TargetError } from './targets.ts';
 
 /** Options every command that reads the map accepts. */
 const mapArgs = {
@@ -21,6 +22,27 @@ const mapArgs = {
 const jsonArg = {
   json: { type: 'boolean', description: 'Machine-readable output, for scripts and agents' },
 } as const;
+
+/** Where the skills go: a comma list of the targets, or all, or none. Asked for when left out. */
+const targetArg = {
+  target: {
+    type: 'string',
+    description: `Where to install the agent skills: ${Object.entries(SKILL_TARGETS)
+      .map(([k, v]) => `${k} (${v})`)
+      .join(', ')}, all or none. Asked for when left out; required when not interactive.`,
+  },
+} as const;
+
+/** Resolves the targets, or prints why not and fails the command. */
+async function targetsOrExit(flag: string | undefined, dir: string) {
+  try {
+    return await resolveTargets(flag, dir);
+  } catch (e) {
+    if (!(e instanceof TargetError)) throw e;
+    console.error(e.message);
+    process.exit(1);
+  }
+}
 
 const print = (issues: ValidationIssue[], mark: string) =>
   issues.forEach((i) => console.log(`${mark} ${formatIssue(i)}`));
@@ -146,10 +168,17 @@ const initCmd = defineCommand({
       description: `Map to start from (${TEMPLATES().join(', ')})`,
       default: 'starter',
     },
+    ...targetArg,
   },
-  run({ args }) {
+  async run({ args }) {
     const dir = resolve(args.dir);
-    init(dir, args.template).forEach((l) => console.log(`  ${l}`));
+    if (!TEMPLATES().includes(args.template)) {
+      console.error(`No template '${args.template}'. Available: ${TEMPLATES().join(', ')}`);
+      process.exit(1);
+    }
+    // Settled before anything is written, so a refused run leaves no half-made project.
+    const targets = await targetsOrExit(args.target, dir);
+    init(dir, args.template, targets).forEach((l) => console.log(`  ${l}`));
     const cd = relative(process.cwd(), dir);
     console.log(`\nNext:\n${cd ? `  cd ${cd}\n` : ''}  npm install\n  npx onboarding-map dev`);
     console.log(`\nThen ask your coding agent, e.g. "turn these notes into an onboarding map".`);
@@ -162,10 +191,13 @@ const skillsCmd = defineCommand({
     install: defineCommand({
       meta: {
         name: 'install',
-        description: 'Copy the skills to .claude/skills/ and point to them from AGENTS.md',
+        description: "Copy the skills to your coding agents' skill folders and point to them from AGENTS.md",
       },
-      run() {
-        installSkills(process.cwd()).forEach((l) => console.log(`  ${l}`));
+      args: targetArg,
+      async run({ args }) {
+        const targets = await targetsOrExit(args.target, process.cwd());
+        if (!targets.length) return console.log('  nothing installed');
+        installSkills(process.cwd(), targets).forEach((l) => console.log(`  ${l}`));
       },
     }),
   },
