@@ -1,0 +1,311 @@
+/* ---------------------------------------------------------------------------
+   Tailwind, with its base reset (preflight). The reset is what the shadcn-svelte
+   components are written against: without it a <button> keeps the browser's
+   padding and background, which pushed the switch knob out of its track.
+   --------------------------------------------------------------------------- */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import 'tailwindcss/utilities.css' layer(utilities);
+/* Enter/exit animations used by the shadcn-svelte popover, sheet and tooltip. */
+@import 'tw-animate-css';
+
+/* bits-ui marks state as data-state="open" / "checked"; the shadcn-svelte
+   components style it through these variants (what `shadcn-svelte init` would
+   have added). */
+/* Dark mode is a class on <html>, set by mode-watcher from the toggle or the OS
+   preference, so the shadcn components' dark: utilities follow the toggle too. */
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant data-open {
+  &:where([data-state='open']),
+  &:where([data-open]:not([data-open='false'])) {
+    @slot;
+  }
+}
+@custom-variant data-closed {
+  &:where([data-state='closed']),
+  &:where([data-closed]:not([data-closed='false'])) {
+    @slot;
+  }
+}
+@custom-variant data-checked {
+  &:where([data-state='checked']),
+  &:where([data-checked]:not([data-checked='false'])) {
+    @slot;
+  }
+}
+@custom-variant data-unchecked {
+  &:where([data-state='unchecked']),
+  &:where([data-unchecked]:not([data-unchecked='false'])) {
+    @slot;
+  }
+}
+@custom-variant data-disabled {
+  &:where([data-disabled='true']),
+  &:where([data-disabled]:not([data-disabled='false'])) {
+    @slot;
+  }
+}
+
+/* Expose the design tokens to Tailwind so utilities and the CSS below share one
+   source of truth. "inline" keeps the reference live, so a utility such as
+   bg-paper follows the light/dark switch exactly like the hand-written rules. */
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-panel: var(--panel);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-rule: var(--rule);
+  --color-rule-soft: var(--rule-soft);
+  --color-route: var(--route);
+  --color-route-soft: var(--route-soft);
+
+  --font-sans: var(--sans);
+  --font-serif: var(--serif);
+
+  /* shadcn-svelte vocabulary, bridged onto the tokens above so its components
+     wear this palette and follow the light/dark switch with no second theme. */
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-card: var(--panel);
+  --color-card-foreground: var(--ink);
+  --color-popover: var(--panel);
+  --color-popover-foreground: var(--ink);
+  --color-primary: var(--route);
+  --color-primary-foreground: var(--panel);
+  --color-secondary: var(--paper-2);
+  --color-secondary-foreground: var(--ink);
+  /* --color-muted is deliberately not bridged: this palette's own muted grey
+     (above) is used throughout the map. */
+  --color-muted-foreground: var(--ink-2);
+  --color-accent: var(--route-soft);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: #b3261e;
+  --color-border: var(--rule);
+  --color-input: var(--rule);
+  --color-ring: var(--route);
+  --color-sidebar: var(--paper);
+  --color-sidebar-foreground: var(--ink);
+  --color-sidebar-primary: var(--route);
+  --color-sidebar-primary-foreground: var(--panel);
+  --color-sidebar-accent: var(--route-soft);
+  --color-sidebar-accent-foreground: var(--ink);
+  --color-sidebar-border: var(--rule-soft);
+  --color-sidebar-ring: var(--route);
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+}
+
+:root {
+  --paper: #e4e9e2;
+  --paper-2: #eef1eb;
+  --panel: #f4f6f1;
+  --ink: #1c2830;
+  --ink-2: #4a5a60;
+  --muted: #8d9a98;
+  --rule: #bfc9c1;
+  --rule-soft: #d3dbd3;
+  --route: #2436c4;
+  --route-soft: rgba(36, 54, 196, 0.16);
+  --fog: 0.22;
+  --wash: 0.13;
+  --serif: 'Newsreader Variable', 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --sans: 'Archivo Variable', 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --paper: #0f1c21;
+    --paper-2: #132329;
+    --panel: #14252b;
+    --ink: #dde7e2;
+    --ink-2: #a6b7b4;
+    --muted: #5f7474;
+    --rule: #2a4046;
+    --rule-soft: #1d3137;
+    --route: #9db0ff;
+    --route-soft: rgba(157, 176, 255, 0.18);
+    --fog: 0.2;
+    --wash: 0.11;
+    color-scheme: dark;
+  }
+}
+:root.dark {
+  --paper: #0f1c21;
+  --paper-2: #132329;
+  --panel: #14252b;
+  --ink: #dde7e2;
+  --ink-2: #a6b7b4;
+  --muted: #5f7474;
+  --rule: #2a4046;
+  --rule-soft: #1d3137;
+  --route: #9db0ff;
+  --route-soft: rgba(157, 176, 255, 0.18);
+  --fog: 0.2;
+  --wash: 0.11;
+  color-scheme: dark;
+}
+/* Page-level defaults on top of preflight. They sit in @layer base with it:
+   unlayered CSS outranks every layer and would override the utilities. */
+@layer base {
+  html {
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+    height: 100%;
+  }
+  body {
+    height: 100%;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 2px solid var(--route);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Type and spacing: one scale for the whole interface (the map's own SVG text
+   is drawn in map units and is not part of it).
+
+   A font size is a role, never a one-off:
+     type-display  the title of a panel or the intro
+     type-title    a serif moment inside a panel: the feeling, "Step back"
+     type-lead     the sentence that leads: a summary's first line, a purpose
+     type-body     running text: steps, summaries, paragraphs
+     type-heading  the heading of a section in a panel
+     type-small    chips, secondary lines, items inside cards
+     type-meta     eyebrows, counters, sources
+
+   Sans roles leave the family to the page (sans), so a serif accent is just
+   font-serif added to them; serif roles set it themselves.
+
+   A gap is a relationship, on Tailwind's 4px scale, never an arbitrary value:
+     1 (4px)   inside one unit: a dot and its label, a verb and its chip
+     2 (8px)   items in a list or a row of chips
+     3 (12px)  elements of one block: eyebrow, title, chips
+     6 (24px)  block to block inside a panel
+     8 (32px)  before a section
+   Panels are padded 6 (24px), 4 (16px) on phones.
+   --------------------------------------------------------------------------- */
+@utility type-display {
+  font-family: var(--serif);
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  @media (width < 48rem) {
+    font-size: 26px;
+  }
+}
+@utility type-title {
+  font-family: var(--serif);
+  font-size: 21px;
+  line-height: 1.3;
+  font-weight: 400;
+}
+@utility type-lead {
+  font-family: var(--serif);
+  font-size: 18px;
+  line-height: 1.45;
+  font-weight: 400;
+}
+@utility type-body {
+  font-size: 15px;
+  line-height: 1.55;
+}
+@utility type-heading {
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+@utility type-small {
+  font-size: 13px;
+  line-height: 1.45;
+}
+@utility type-meta {
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+/* The sidebars resize with an ease rather than shadcn's linear 200ms, so a
+   panel widening for Do and the map zooming in read as one motion. Set here
+   because the gap that drives the map's width is internal to the component. */
+[data-slot='sidebar-gap'],
+[data-slot='sidebar-container'] {
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+  touch-action: none;
+}
+#map:active {
+  cursor: grabbing;
+}
+
+/* ---------- Heading over the map ---------- */
+
+/* ---------- Journey strip ---------- */
+
+/* Must come after the .journey and .stage-btn rules above: a container query
+   adds no specificity, so when it sat earlier in the file these declarations
+   lost to the later base rules. The title was hidden but the button kept its
+   14px right padding, which pushed the numbered circle off to the left. */
+
+/* ---------- Side panel ---------- */
+
+/* ---------- Goal blueprint ---------- */
+/* ---------- SVG ---------- */
+
+/* Named for this project, not just "pulse": Tailwind ships a @keyframes
+   pulse of its own and same-named keyframes collide — the bundler keeps only
+   the last, which silently replaced this one. */
+@keyframes waypoint-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.9;
+  }
+  80%,
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+/* The ring around the part of the big picture a view is about. */
+@keyframes piece-glow {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.3;
+  }
+}
+@keyframes flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .leaf.current .pulse,
+  * {
+    transition: none !important;
+  }
+}

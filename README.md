@@ -1,0 +1,49 @@
+# onboarding-map
+
+An onboarding map for any subject: a radial map of everything a newcomer will meet, with one highlighted route through it, walked in stages of _do → observe → read_. You bring the content as one file; the package renders it as a static site.
+
+You don't need a CMS: your coding agent writes and maintains the map, using skills this package installs, and the CLI checks its work.
+
+```sh
+npx onboarding-map init my-map            # or --template physics
+cd my-map && npm install
+npx onboarding-map dev                    # http://localhost:4321, reloads on save
+```
+
+Then ask your agent, e.g. _“turn these notes into an onboarding map”_ or _“refresh the stale content”_.
+
+## Commands
+
+| Command          | What it does                                                                                                        |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `init [dir]`     | Start a project: `map.ts`, config, package.json, agent skills                                                       |
+| `dev`            | Serve the map; reload on save; list validation problems in the page                                                 |
+| `build`          | Validate and write a static site to `dist/` (`map.json` + the app)                                                  |
+| `validate`       | Check every reference; exit 1 on errors                                                                             |
+| `changelog`      | What changed since a git revision (`--against`, default `HEAD`), as Markdown for review                             |
+| `audit`          | Stale or unfinished content: `TODO` links, missing sources, updated source documents; `--check-urls` for dead links |
+| `schema`         | The JSON Schema, for `map.json` files                                                                               |
+| `skills install` | (Re)install the agent skills into `.claude/skills/` and `AGENTS.md`                                                 |
+
+`validate`, `changelog` and `audit` take `--json`. Every problem has a `path` (`nodes.git`, `stages.setup`) so an agent can find what to fix.
+
+## The map file
+
+`map.ts` (`export default defineMap({ … })`) or `map.json`. Types and helpers come from the package: `defineMap`, `docLink`, `todoLink`, `ref`. The model is documented in the types (`OnboardingMap` in `src/core/model.ts`) and, for agents, in `skills/onboarding-map-author/SKILL.md`.
+
+Requires Node 22.18 or later (for loading `map.ts` without a build step).
+
+## Developing the package
+
+```sh
+npm install
+npm run dev      # the app, serving ONBOARDING_MAP (default: templates/physics.ts) as /map.json
+npm run build    # dist/core + dist/cli (tsc), schema/, dist/app (SvelteKit static shell)
+npm run check && npm run lint
+```
+
+The CLI is `src/cli` (citty), the data model and checks are `src/core`, and the app is `src/routes` + `src/lib`. A map project imports `src/core` as `onboarding-map`; the CLI copies `dist/app` next to its `map.json`.
+
+## License
+
+MIT

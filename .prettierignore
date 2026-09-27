@@ -1,0 +1,9 @@
+.svelte-kit
+dist
+schema
+node_modules
+package-lock.json
+
+# Hand-maintained with deliberate column alignment that Prettier would flatten.
+src/core/model.ts
+templates/physics.ts
