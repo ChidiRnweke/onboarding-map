@@ -54,7 +54,10 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.lib.json --noEmit",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "docs:dev": "npm --prefix docs run dev",
+    "docs:build": "npm --prefix docs run build",
+    "docs:embed": "ONBOARDING_BASE=/onboarding-map/embed/physics npm run build && node dist/cli/index.js build --map templates/physics.ts --out docs/public/embed/physics"
   },
   "dependencies": {
     "@clack/prompts": "^1.8.1",

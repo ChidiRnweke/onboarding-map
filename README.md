@@ -2,7 +2,9 @@
 
 An onboarding map for any subject: a radial map of everything a newcomer will meet, with one highlighted route through it, walked in stages of _do → observe → read_. You bring the content as one file; the package renders it as a static site.
 
-![An onboarding map for a cloud team: regions of the map around a centre, the route of the first stage highlighted, and the stage panel with the goal as a diagram](https://raw.githubusercontent.com/ChidiRnweke/onboarding-map/main/docs/screenshot.png)
+![An onboarding map for a cloud team: regions of the map around a centre, the route of the first stage highlighted, and the stage panel with the goal as a diagram](https://raw.githubusercontent.com/ChidiRnweke/onboarding-map/main/docs/public/screenshot.png)
+
+**[Documentation](https://chidirnweke.github.io/onboarding-map/)** — the user guide, the map model, and the contributor guide.
 
 You don't need a CMS: your coding agent writes and maintains the map, using skills this package installs, and the CLI checks its work.
 
