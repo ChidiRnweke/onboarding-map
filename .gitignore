@@ -4,3 +4,4 @@ dist
 schema
 .DS_Store
 *.tgz
+artifacts
