@@ -1,0 +1,38 @@
+---
+title: Documentation
+description: An onboarding map for any subject — a territory to recognise, a route to follow, written by your coding agent.
+template: splash
+hero:
+  title: A map of everything a newcomer will meet
+  tagline: One file, written by your coding agent, rendered as a radial map with a single route through it — walked in stages of do → observe → read.
+---
+
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+export const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+
+You bring the content as one file (`map.ts` or `map.json`). The package renders it as a
+static site: a radial map of the territory with one route through it, Do → Observe → Read.
+
+<CardGrid>
+  <LinkCard
+    title="Get started"
+    href={`${base}user-guide/getting-started/`}
+    description="Start a project from a template and walk the route."
+  />
+  <LinkCard
+    title="Write a map"
+    href={`${base}user-guide/authoring-a-map/`}
+    description="The data model, its conventions and the writing voice."
+  />
+  <LinkCard
+    title="Command line"
+    href={`${base}user-guide/cli/`}
+    description="init, dev, build, validate, changelog, audit, schema."
+  />
+  <LinkCard
+    title="Contribute"
+    href={`${base}contributor-guide/development/`}
+    description="Set up the repo, run the checks and land a change."
+  />
+</CardGrid>

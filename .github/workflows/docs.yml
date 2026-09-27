@@ -1,0 +1,67 @@
+name: Docs
+
+# Builds the Starlight site in docs/ (including the live map embed) and, on main,
+# publishes it to GitHub Pages. Pages must be set to "GitHub Actions" as its
+# source in the repository settings.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - 'templates/**'
+      - 'src/**'
+      - 'svelte.config.js'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'templates/**'
+      - 'src/**'
+      - 'svelte.config.js'
+      - '.github/workflows/docs.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            docs/package-lock.json
+      # Builds the package, then the physics template into docs/public/embed
+      # with the base path the embed is served from.
+      - run: npm ci
+      - run: npm run docs:embed
+      - run: npm ci --prefix docs
+      - run: npm run build --prefix docs
+      - if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/dist
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

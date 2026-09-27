@@ -1,0 +1,55 @@
+---
+const { siteTitle } = Astro.locals.starlightRoute;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+---
+
+<footer class="om-footer">
+  <div class="om-footer__inner">
+    <p class="om-footer__brand">{siteTitle} <span>· MIT</span></p>
+    <nav aria-label="Footer">
+      <a href="https://github.com/ChidiRnweke/onboarding-map">GitHub</a>
+      <a href="https://www.npmjs.com/package/onboarding-map">npm</a>
+      <a href={`${base}contributor-guide/development/`}>Contribute</a>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .om-footer {
+    border-top: 1px solid var(--rule-soft);
+    margin-top: 4rem;
+  }
+  .om-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 1.5rem var(--sl-content-pad-x);
+    max-width: 72rem;
+    margin-inline: auto;
+  }
+  .om-footer__brand {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .om-footer__brand span {
+    color: var(--ink-2);
+    font-family: var(--sans);
+    font-size: 0.8125rem;
+  }
+  nav {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.875rem;
+  }
+  a {
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--route);
+  }
+</style>

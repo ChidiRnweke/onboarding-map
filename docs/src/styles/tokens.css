@@ -1,0 +1,55 @@
+/* ---------------------------------------------------------------------------
+   The map's palette and type, copied from the app's src/app.css so the docs and
+   the map are the same object. Keep the two in step: a change to the palette,
+   the radii or the fonts is a change in both files (see AGENTS.md).
+
+   Starlight is themed through CSS custom properties (--sl-color-*), which
+   theme.css bridges onto the tokens below. The raw tokens keep the app's names
+   so the mapping reads as a translation, not a second design.
+   --------------------------------------------------------------------------- */
+
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/newsreader/opsz.css';
+@import '@fontsource-variable/newsreader/opsz-italic.css';
+
+:root {
+  --paper: #e4e9e2;
+  --paper-2: #eef1eb;
+  --panel: #f4f6f1;
+  --ink: #1c2830;
+  --ink-2: #4a5a60;
+  --muted: #8d9a98;
+  --rule: #bfc9c1;
+  --rule-soft: #d3dbd3;
+  --route: #2436c4;
+  --route-soft: rgba(36, 54, 196, 0.16);
+
+  --serif: 'Newsreader Variable', 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --sans: 'Archivo Variable', 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+
+  /* The sidebars resize with this ease, so a panel widening and the map zooming
+     read as one motion. Shared here so the docs' own panels move the same way. */
+  --ease-panel: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --paper: #0f1c21;
+  --paper-2: #132329;
+  --panel: #14252b;
+  --ink: #dde7e2;
+  --ink-2: #a6b7b4;
+  --muted: #5f7474;
+  --rule: #2a4046;
+  --rule-soft: #1d3137;
+  --route: #9db0ff;
+  --route-soft: rgba(157, 176, 255, 0.18);
+
+  color-scheme: dark;
+}

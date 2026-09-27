@@ -1,0 +1,192 @@
+/* ---------------------------------------------------------------------------
+   Bridge the map's tokens (tokens.css) onto Starlight. Everything Starlight
+   draws — links, current nav item, code, asides, the top bar — reads its
+   --sl-color-* and --sl-font, so mapping them once re-skins the whole site.
+
+   This file is unlayered on purpose: unlayered CSS outranks Starlight's
+   @layer starlight.* rules, so no !important is needed.
+   --------------------------------------------------------------------------- */
+
+:root {
+  --sl-font: var(--sans);
+
+  /* The map's body size, with room for a comfortable measure on the web. */
+  --sl-content-width: 47rem;
+  --sl-line-height: 1.65;
+
+  /* Light is the base; the dark block below overrides. Starlight's inline
+     script sets data-theme before first paint, so this is rarely seen bare. */
+  --sl-color-white: var(--ink);
+  --sl-color-gray-1: var(--ink);
+  --sl-color-gray-2: var(--ink);
+  --sl-color-gray-3: var(--ink-2);
+  --sl-color-gray-4: var(--muted);
+  --sl-color-gray-5: var(--rule);
+  --sl-color-gray-6: var(--paper-2);
+  --sl-color-gray-7: var(--panel);
+  --sl-color-black: var(--paper);
+
+  --sl-color-accent-low: var(--route-soft);
+  --sl-color-accent: var(--route);
+  --sl-color-accent-high: var(--route);
+
+  --sl-color-text: var(--ink);
+  --sl-color-text-accent: var(--route);
+  --sl-color-text-invert: var(--panel);
+  --sl-color-bg: var(--paper);
+  --sl-color-bg-nav: var(--panel);
+  --sl-color-bg-sidebar: var(--paper);
+  --sl-color-bg-inline-code: var(--paper-2);
+  --sl-color-bg-accent: var(--route);
+  --sl-color-hairline-light: var(--rule-soft);
+  --sl-color-hairline: var(--rule);
+  --sl-color-hairline-shade: var(--rule);
+}
+
+:root[data-theme='dark'] {
+  --sl-color-white: var(--ink);
+  --sl-color-gray-1: var(--ink);
+  --sl-color-gray-2: var(--ink);
+  --sl-color-gray-3: var(--ink-2);
+  --sl-color-gray-4: var(--muted);
+  --sl-color-gray-5: var(--rule);
+  --sl-color-gray-6: var(--paper-2);
+  --sl-color-black: var(--paper);
+
+  --sl-color-accent-low: var(--route-soft);
+  --sl-color-accent: var(--route);
+  --sl-color-accent-high: var(--route);
+
+  --sl-color-text: var(--ink);
+  --sl-color-text-accent: var(--route);
+  --sl-color-text-invert: var(--paper);
+  --sl-color-bg: var(--paper);
+  --sl-color-bg-nav: var(--panel);
+  --sl-color-bg-sidebar: var(--paper);
+  --sl-color-bg-inline-code: var(--paper-2);
+  --sl-color-bg-accent: var(--route);
+  --sl-color-hairline-light: var(--rule-soft);
+  --sl-color-hairline: var(--rule);
+  --sl-color-hairline-shade: var(--rule);
+}
+
+/* ---------- Type: serif titles, sans running text ---------------- */
+
+/* The app sets titles in Newsreader and keeps the interface in Archivo. That
+   one contrast is what makes a page read as "the map"; keep it here. */
+h1,
+h2,
+.site-title,
+.hero h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  line-height: 1.1;
+}
+h2 {
+  line-height: 1.2;
+}
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+::selection {
+  background: var(--route-soft);
+}
+
+:focus-visible {
+  outline: 2px solid var(--route);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ---------- Surfaces: paper, panels, hairlines ------------------- */
+
+/* Starlight's top bar is translucent by default; make it the panel colour with
+   a rule under it, like a map panel. */
+header.header {
+  background-color: color-mix(in srgb, var(--panel) 92%, transparent);
+  border-bottom: 1px solid var(--rule-soft);
+  backdrop-filter: blur(6px);
+}
+
+.sidebar-pane {
+  border-inline-end: 1px solid var(--rule-soft);
+}
+
+/* Links: the route colour, underlined only on hover, so prose stays calm. */
+.sl-markdown-content a:not(:where(.not-content *)) {
+  color: var(--route);
+  text-underline-offset: 0.2em;
+  text-decoration-color: color-mix(in srgb, var(--route) 40%, transparent);
+}
+.sl-markdown-content a:not(:where(.not-content *)):hover {
+  text-decoration-color: var(--route);
+}
+
+/* Current page in the sidebar wears the route colour, not Starlight's blue. */
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover {
+  color: var(--route);
+}
+.sidebar-content a[aria-current='page']::before {
+  background-color: var(--route);
+}
+
+/* Inline code sits on paper-2 with a soft rule, matching the app's chips. */
+.sl-markdown-content code:not(pre code) {
+  border: 1px solid var(--rule-soft);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.35em;
+}
+
+/* Code blocks: framed like a panel. */
+.expressive-code .frame {
+  border-radius: var(--radius-lg);
+  border-color: var(--rule);
+}
+
+/* Asides and cards get the app's radii and hairline. */
+.starlight-aside {
+  border-radius: var(--radius-lg);
+}
+.card {
+  border-radius: var(--radius-lg);
+  border-color: var(--rule);
+}
+
+/* Prev/next links and the table of contents share the rest of the palette. */
+.pagination-links a {
+  border-radius: var(--radius-lg);
+  border-color: var(--rule);
+}
+.pagination-links a:hover {
+  border-color: var(--route);
+}
+starlight-toc a[aria-current='true'] {
+  color: var(--route);
+}
+
+/* ---------- Motion ---------------------------------------------- */
+
+/* Panels ease with the map's curve, so opening one feels like the same hand. */
+.sidebar-pane,
+header.header {
+  transition-timing-function: var(--ease-panel);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

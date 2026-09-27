@@ -5,3 +5,8 @@ schema
 .DS_Store
 *.tgz
 artifacts
+
+# The docs site: build output and the generated live-map embed.
+docs/.astro
+docs/dist
+docs/public/embed

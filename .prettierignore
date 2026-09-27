@@ -5,6 +5,9 @@ schema
 node_modules
 package-lock.json
 
+# The docs site is its own package with its own tooling.
+docs
+
 # Hand-maintained with deliberate column alignment that Prettier would flatten.
 src/core/model.ts
 templates/physics.ts
