@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/ChidiRnweke/onboarding-map/compare/v0.1.1...v0.2.0) (2026-09-27)
+
+
+### Features
+
+* **cli:** install skills for Claude Code, Codex or any Agent Skills tool ([#5](https://github.com/ChidiRnweke/onboarding-map/issues/5)) ([22338ac](https://github.com/ChidiRnweke/onboarding-map/commit/22338ac1850ef1a3453ca386ff511b20a224da8c))
+
 ## [0.1.1](https://github.com/ChidiRnweke/onboarding-map/compare/v0.1.0...v0.1.1) (2026-09-27)
 
 
