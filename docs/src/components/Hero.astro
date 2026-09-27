@@ -1,12 +1,12 @@
 ---
 // The landing page, in the map's own voice: a serif display line over a live
-// map, framed like a panel. The iframe is the built physics template; the docs
-// build writes it to public/embed/physics (see the root `docs:embed` script).
+// map, framed like a panel. The iframe is the project's own map — the
+// documentation, mapped with onboarding-map. See the root `docs:embed` script.
 const { data } = Astro.locals.starlightRoute.entry;
 const { title = data.title, tagline } = data.hero || {};
 
 const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
-const embedSrc = `${base}embed/physics/`;
+const embedSrc = `${base}embed/project/`;
 
 const actions = [
   { text: 'Get started', href: `${base}user-guide/getting-started/`, variant: 'primary' },
@@ -34,6 +34,14 @@ const spokes = Array.from({ length: 12 }, (_, i) => i * 30);
     </div>
   </div>
 
+  <script is:inline>
+    // Show the map itself, not the app's first-visit intro. Seed the flag before
+    // the iframe below starts loading.
+    try {
+      localStorage.setItem('onboarding-map:onboarding-map:intro-seen', 'true');
+    } catch {}
+  </script>
+
   <figure class="om-stage">
     <svg class="om-motif" viewBox="0 0 400 300" aria-hidden="true" focusable="false">
       <g stroke="var(--rule-soft)" fill="none">
@@ -48,13 +56,13 @@ const spokes = Array.from({ length: 12 }, (_, i) => i * 30);
       <iframe
         id="om-embed"
         src={embedSrc}
-        title="A live onboarding map: the physics template"
+        title="A live onboarding map: this project"
         loading="lazy"
       ></iframe>
     </div>
     <figcaption>
-      A live map — the physics template. Drag the territory, walk the route.
-      <a href={embedSrc}>Open it full screen</a>.
+      A live map — this one is the documentation’s own. Drag it, follow the path.
+      <a href={`${base}user-guide/examples/`}>See it next to its data</a>.
     </figcaption>
   </figure>
 </div>

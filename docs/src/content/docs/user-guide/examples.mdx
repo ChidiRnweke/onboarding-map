@@ -1,0 +1,43 @@
+---
+title: Examples
+description: Two maps to start from, each shown next to the file that made it.
+---
+
+import MapData from '../../../components/MapData.astro';
+
+The package ships two maps. Below, each one is live on the left and its file is on the right, so you
+can see exactly what produced it. Drag the map; scroll the file.
+
+## Starter
+
+The smallest useful map: two regions, a handful of items, two stages. This is what
+`init` gives you to replace.
+
+<MapData
+  name="starter"
+  title="Starter"
+  caption="Your first week — a laptop, a change, and the review that merges it."
+/>
+
+## Physics
+
+A complete map outside software. It shows what a full route looks like: several regions, a long
+journey, and a goal that fills in as you go.
+
+<MapData
+  name="physics"
+  title="Physics"
+  caption="Motion, forces and energy, mapped for a newcomer to the subject."
+/>
+
+## This documentation
+
+The map of this project. It is written by hand, in one file, like any other map — and you are
+reading the site it is served from.
+
+<MapData
+  name="project"
+  mapId="onboarding-map"
+  title="This project"
+  caption="How to make your own onboarding map, mapped with onboarding-map."
+/>

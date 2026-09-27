@@ -1,61 +1,62 @@
 ---
 title: Get started
-description: Start a map project from a template, serve it, and build a static site.
+description: From an empty folder to a map you can send.
 ---
 
-## Requirements
-
-Node 22.18 or later. The map file is loaded by Node itself (type stripping), so no build step is
-needed to run it.
+You need Node 22.18 or later, and a subject you want to onboard someone into.
 
 ## Start a project
 
 ```sh
-npx onboarding-map init my-map            # or: --template physics
+npx onboarding-map init my-map
 cd my-map && npm install
-npx onboarding-map dev                    # http://localhost:4321, reloads on save
 ```
 
-`init` writes:
+That gives you one file, `map.ts`, holding a short example map, plus the agent skills and a few
+scripts. The name of the file is set in `onboarding-map.config.json`.
 
-- `map.ts` — a map from the chosen template (`starter` by default; `physics` is a complete example
-  outside software);
-- `onboarding-map.config.json` — names the map file and the build folder;
-- `package.json` with `dev`, `build`, `validate` and `audit` scripts;
-- agent skills, installed where your coding agent looks for them (see
-  [working with your agent](/user-guide/working-with-your-agent/)).
+## Put your subject in
 
-You can also start by hand: create a `map.ts`, add `"onboarding-map"` as a dev dependency, and
-install the skills with `npx onboarding-map skills install`.
+Open `map.ts`. It starts as a tiny example — a couple of regions and two stages. Replace it with
+your subject, or ask your coding agent to:
 
-## Serve it
+> Turn these notes into an onboarding map.
+
+Point the agent at your material (notes, slides, a syllabus, a codebase). It drafts the file; you
+decide what belongs on the path. See [working with your agent](/user-guide/working-with-your-agent/).
+
+## See it while you write
 
 ```sh
-npx onboarding-map dev
+npx onboarding-map dev        # http://localhost:4321
 ```
 
-The page reloads when you save the map, and lists validation problems in place of the map when
-something does not resolve.
-
-## Build it
-
-```sh
-npx onboarding-map build        # writes map.json + the app to ./dist
-```
-
-The output is a static site; serve it from any static host.
+The page reloads on every save. When something in the file does not add up, the page says so instead
+of showing the map.
 
 ## Check it
 
 ```sh
-npx onboarding-map validate     # exit 1 on errors
-npx onboarding-map audit        # stale or unfinished content; never fails the build
+npx onboarding-map validate   # every reference resolves; exit 1 if not
+npx onboarding-map audit      # stale or unfinished content
 ```
 
-Every problem has a `path` into the map (`nodes.git`, `stages.setup`). Add `--json` for
-machine-readable output.
+Fix what `validate` reports. `audit` never fails the build — it is a to-do list: dead links, sources
+that changed, items nobody is sent to.
+
+## Send it
+
+```sh
+npx onboarding-map build      # writes the site to ./dist
+```
+
+Upload `dist/` to any static host. That is the map the newcomer opens.
 
 :::tip
-Ask your coding agent to do the writing: _"turn these notes into an onboarding map"_, or
-_"refresh the stale content"_. The skills the project ships tell it how.
+Start from a finished example instead of an empty one:
+
+```sh
+npx onboarding-map init my-map --template physics
+```
+
 :::

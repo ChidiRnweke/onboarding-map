@@ -18,6 +18,7 @@ or `npx` command.
 | `templates/`              | Maps that `init --template` copies. `starter` is minimal; `physics` is a complete example outside software.                                                                                                         |
 | `skills/`                 | **Product, not instructions for working here.** Skills shipped to map authors' coding agents by `init` and `skills install`, into `.claude/skills`, `.agents/skills` and/or `.codex/skills` (`src/cli/targets.ts`). |
 | `docs/`                   | The documentation site (Astro + Starlight), published to GitHub Pages. Its own package.                                                                                                                             |
+| `examples/`               | `onboarding-map.ts`, a map of this project. The docs build it and show it with its data; it is not a template.                                                                                                      |
 | `tools/`                  | Visual regression: `shoot.mjs` screenshots two served builds, `diff.mjs` pixel-diffs them. `capture.mjs` takes a single-state screenshot for PR evidence.                                                           |
 
 `npm run build` compiles `src/core` + `src/cli` with `tsc` to `dist/core` and `dist/cli`, generates
@@ -33,17 +34,18 @@ npm run check    # svelte-check + tsc for src/core and src/cli
 npm run lint     # prettier + eslint
 node dist/cli/index.js validate --map templates/starter.ts   # and templates/physics.ts
 
-npm run docs:embed   # build the physics template into docs/public/embed (needed before docs:dev)
+npm run docs:embed   # build the example maps into docs/public/embed (needed before docs:dev)
 npm run docs:dev     # the docs site at http://localhost:4321/onboarding-map/
 npm run docs:build   # build the docs site to docs/dist
 ```
 
 `docs/` is its own package (its own lockfile), ignored by the root Prettier and ESLint. It mirrors
 the app's palette and type in `docs/src/styles/tokens.css`; a change to the palette, fonts or radii
-in `src/app.css` is a change in both files. `docs:embed` builds a map with
-`ONBOARDING_BASE=/onboarding-map/embed/physics` so the embedded shell can find its assets under the
-Pages base; see `svelte.config.js`. A change to the model or to what the CLI prints updates the
-matching `skills/*/SKILL.md` **and** the user-guide page under `docs/`.
+in `src/app.css` is a change in both files. `docs:embed` runs `tools/embed-maps.mjs`, which builds
+each example (the two templates and `examples/onboarding-map.ts`) with `ONBOARDING_BASE` set to the
+path that copy is served from, and copies each source to `docs/public/examples/`. The Examples page
+shows a map and its data side by side; see `svelte.config.js`. A change to the model or to what the
+CLI prints updates the matching `skills/*/SKILL.md` **and** the matching page under `docs/`.
 
 `src/core/model.ts` and `templates/physics.ts` are aligned by hand and ignored by Prettier; keep
 their column style when editing them.
