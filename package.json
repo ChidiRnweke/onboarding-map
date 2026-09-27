@@ -23,7 +23,7 @@
   },
   "type": "module",
   "bin": {
-    "onboarding-map": "./dist/cli/index.js"
+    "onboarding-map": "dist/cli/index.js"
   },
   "exports": {
     ".": {
@@ -48,7 +48,7 @@
   "scripts": {
     "dev": "npm run build:lib && vite dev",
     "build": "npm run build:lib && npm run build:schema && vite build",
-    "build:lib": "tsc -p tsconfig.lib.json",
+    "build:lib": "tsc -p tsconfig.lib.json && node -e \"require('fs').chmodSync('dist/cli/index.js', 0o755)\"",
     "build:schema": "ts-json-schema-generator --path src/core/model.ts --type OnboardingMap --tsconfig tsconfig.lib.json --no-type-check -o schema/map.schema.json",
     "prepack": "npm run build",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.lib.json --noEmit",
