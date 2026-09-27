@@ -5,6 +5,9 @@
   import { getAppState } from '$lib/state.svelte';
   import Markup from '../ui/Markup.svelte';
   import TipCard from './TipCard.svelte';
+  import AgentHere from '../agent/AgentHere.svelte';
+  import ScanEyeIcon from '@lucide/svelte/icons/scan-eye';
+  import { getAgent } from '$lib/agent/agent.svelte';
 
   // Do or Observe, one line at a time. The line in hand is open, with its tip
   // and note; the ones before it fold to a single ticked line, the ones after
@@ -14,6 +17,22 @@
   const app = getAppState();
   const labels = $derived(app.map.labels);
   const steps = $derived(app.steps(app.currentStage, phase));
+  const agent = getAgent();
+
+  // The learner's note, checked against what the step should show. It is sent
+  // only now, when they ask: notes are theirs otherwise.
+  function checkNote(i: number) {
+    const note = app.note(`${phase}:${i}`).trim();
+    if (!note) return;
+    const stage = app.currentStage;
+    agent.ask(
+      { kind: 'step', stage: stage.id, phase, index: i },
+      `${stage.title} · ${labels.phases[phase]} ${i + 1}`,
+      `Here is what I noticed: «${note}». Does it match what this step should show? ` +
+        'Say what holds, what is off, and what to look at again; point at the concept on the map if it helps.',
+      labels.agent.checkNote,
+    );
+  }
 </script>
 
 <ol class="m-0 grid list-none gap-1 p-0">
@@ -42,7 +61,27 @@
                 placeholder={labels.phases.notePlaceholder}
                 value={app.note(`${phase}:${i}`)}
                 oninput={(e) => app.setNote(`${phase}:${i}`, e.currentTarget.value)}></textarea>
+              {#if agent.enabled && app.note(`${phase}:${i}`).trim()}
+                <button
+                  class="group/agent type-small mt-2 inline-flex cursor-pointer items-center gap-2 rounded-lg border-0 bg-transparent py-1 pr-2 pl-1 text-ink-2 hover:text-ink"
+                  onclick={() => checkNote(i)}
+                >
+                  <span
+                    class="grid size-5 flex-none place-items-center rounded-md bg-route-soft text-route transition-colors group-hover/agent:bg-route group-hover/agent:text-paper"
+                  >
+                    <ScanEyeIcon size={12} strokeWidth={2.2} />
+                  </span>
+                  {labels.agent.checkNote}
+                </button>
+              {/if}
             {/if}
+            <!-- After the note, so an answer about what the learner noticed sits under it. -->
+            {#key `${app.currentStage.id}:${phase}:${i}`}
+              <AgentHere
+                anchor={{ kind: 'step', stage: app.currentStage.id, phase, index: i }}
+                title="{app.currentStage.title} · {labels.phases[phase]} {i + 1}"
+              />
+            {/key}
           </div>
         </div>
       {:else}

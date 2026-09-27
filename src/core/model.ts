@@ -255,6 +255,35 @@ export interface GoalModule {
   refs?: Ref[];
 }
 
+/** Model providers the assistant can call from the learner's browser. */
+export type AssistantProvider =
+  | 'openai' | 'anthropic' | 'google' | 'openrouter' | 'azure' | 'ollama' | 'lmstudio' | 'custom';
+
+export const ASSISTANT_PROVIDERS: AssistantProvider[] =
+  ['openai', 'anthropic', 'google', 'openrouter', 'azure', 'ollama', 'lmstudio', 'custom'];
+
+/**
+ * An agent that helps the learner along the route: it explains a step, a
+ * concept or a link where the learner is looking, and moves the map to show
+ * what it means. Every map has one unless it says `enabled: false`. The
+ * learner brings their own key, which never leaves their browser except to the
+ * provider; nothing here is secret.
+ */
+export interface Assistant {
+  /** `false` turns the assistant off for this map. Default: on. */
+  enabled?: boolean;
+  /** The provider offered first. The learner can pick another unless `keyless`. */
+  provider?: AssistantProvider;
+  /** Model id; for Azure, the deployment name. Default: the provider's own. */
+  model?: string;
+  /** Azure resource URL, a local server, or an organisation's OpenAI-compatible proxy. */
+  baseURL?: string;
+  /** Said to the model before anything else: house rules, tone, what not to do. */
+  instructions?: string;
+  /** The proxy at `baseURL` holds the key, so the learner is never asked for one. */
+  keyless?: boolean;
+}
+
 /**
  * Every piece of interface copy. Placeholders in {braces} are filled in
  * by the renderer; the ones available are listed per field.
@@ -452,6 +481,36 @@ export interface Labels {
   };
   /** Display names for DocLink.source keys. Unknown keys show as-is. */
   sources: Record<string, string>;
+  /** The assistant: its actions where they apply, its answers, its setup. */
+  agent: {
+    /** Actions, each placed on the thing it acts on. Short: they sit beside other controls. */
+    walkThrough: string;
+    explainNode: string;
+    explainLink: string;
+    takeaways: string;
+    checkMe: string;
+    fit: string;
+    summarize: string;
+    /** Under a step's note field, once the learner has written something. */
+    checkNote: string;
+    ask: string;
+    /** The Agent view's opening sentence. {place} */
+    context: string;
+    followUp: string;
+    /** Under every answer, so it is never mistaken for the map's own text. {model} */
+    provenance: string;
+    earlier: string;
+    back: string;
+    stop: string;
+    retry: string;
+    accept: string;
+    decline: string;
+    setup: string;
+    setupIntro: string;
+    test: string;
+    settings: string;
+    forget: string;
+  };
 }
 
 export interface OnboardingMap {
@@ -469,6 +528,8 @@ export interface OnboardingMap {
   labels?: LabelsInput;
   /** Optional: a map without a goal still works as a plain journey. */
   goal?: Goal;
+  /** The agent that helps along the route. On unless `enabled: false`. */
+  assistant?: Assistant;
   /** The kinds of node this map uses. Every node's kind is one of these, or 'category'. */
   kinds: KindDef[];
   /** Names for the periods stages are grouped in. Periods without one are just numbered. */
@@ -767,6 +828,19 @@ export function validate(map: OnboardingMap): ValidationIssue[] {
   }
   for (const s of map.stages) checkRefs(`stages.${s.id}`, s.refs);
   for (const m of map.goal?.modules ?? []) checkRefs(`goal.modules.${m.id}`, m.refs);
+
+  // Assistant
+  const a = map.assistant;
+  if (a) {
+    if (a.provider && !ASSISTANT_PROVIDERS.includes(a.provider))
+      err('assistant.provider', `unknown provider ${a.provider}; one of ${ASSISTANT_PROVIDERS.join(', ')}`);
+    if (a.baseURL !== undefined && !URL.canParse(a.baseURL)) err('assistant.baseURL', 'not a URL');
+    if ((a.provider === 'azure' || a.provider === 'custom' || a.keyless) && !a.baseURL)
+      err('assistant.baseURL', a.keyless ? 'keyless needs the proxy URL' : `${a.provider} needs a baseURL`);
+    if (a.provider === 'azure' && !a.model) err('assistant.model', 'azure needs the deployment name');
+    for (const k of ['enabled', 'keyless'] as const)
+      if (a[k] !== undefined && typeof a[k] !== 'boolean') err(`assistant.${k}`, 'should be true or false');
+  }
 
   // Goal checks
   if (map.goal) {

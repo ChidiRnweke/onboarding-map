@@ -44,6 +44,7 @@ Labels are merged one level deep: setting `tip.label` keeps the other `tip` defa
 | `region`           | The region view.                                                          |
 | `kind`             | The kind view.                                                            |
 | `sources`          | Display names for `DocLink.source` keys (e.g. `vendor: 'Official docs'`). |
+| `agent`            | The assistant: its actions, its answers' caption, its setup.              |
 
 :::note
 `period` is the most common override: a week-long onboarding sets `period: 'Week'`, and the journey

@@ -8,6 +8,7 @@
   import ModuleChip from '../ui/ModuleChip.svelte';
   import NodeChip from '../ui/NodeChip.svelte';
   import PanelHeader from '../ui/PanelHeader.svelte';
+  import AgentHere from '../agent/AgentHere.svelte';
   import PanelSection from '../ui/PanelSection.svelte';
   import RefsSection from '../ui/RefsSection.svelte';
   import type { DerivedModule } from '$core/model';
@@ -91,6 +92,7 @@
 </PanelHeader>
 
 <p class="type-lead m-0"><Markup text={module.purpose} /></p>
+<AgentHere anchor={{ kind: 'module', id: module.id }} title={module.title} />
 
 {#if app.map.goal}
   <!-- Its place in the whole, as it stands now. -->

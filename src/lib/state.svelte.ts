@@ -15,6 +15,22 @@ export interface SidebarHandle {
 
 export type ModuleState = 'done' | 'current' | 'ahead';
 
+/** Nodes the assistant points at, and why. */
+export interface AgentFocus {
+  ids: string[];
+  caption: string;
+}
+
+/** Where the learner is: enough to put them back after the assistant moves them. */
+export interface Place {
+  stage: number;
+  phase: Phase;
+  step: number;
+  selected: string | null;
+  module: string | null;
+  view: View;
+}
+
 /**
  * All interface state for one view of the map.
  *
@@ -43,6 +59,15 @@ export class AppState {
   /** The big picture told part by part, over everything else. */
   introOpen = $state(false);
 
+  /** The assistant's own view is open in the panel. */
+  agentOpen = $state(false);
+  /**
+   * What the assistant is pointing at on the map, with a line saying why. It
+   * wins the camera and the outlines until the learner picks something
+   * themselves.
+   */
+  agentFocus = $state<AgentFocus | null>(null);
+
   /** Where the learner is inside the current stage. */
   phase = $state<Phase>('brief');
   step = $state(0);
@@ -63,17 +88,19 @@ export class AppState {
 
   /** What the details panel shows. */
   readonly panelView = $derived.by(() =>
-    this.module
-      ? 'module'
-      : this.selected
-        ? 'node'
-        : this.period !== null
-          ? 'period'
-          : this.region
-            ? 'region'
-            : this.kind
-              ? 'kind'
-              : 'stage',
+    this.agentOpen
+      ? 'agent'
+      : this.module
+        ? 'module'
+        : this.selected
+          ? 'node'
+          : this.period !== null
+            ? 'period'
+            : this.region
+              ? 'region'
+              : this.kind
+                ? 'kind'
+                : 'stage',
   );
 
   /**
@@ -84,6 +111,7 @@ export class AppState {
    */
   readonly cameraFocus = $derived.by((): string[] | null => {
     if (this.introOpen) return null;
+    if (this.agentFocus) return this.agentFocus.ids;
     if (this.selected) {
       const near = this.map.edges.flatMap((e) =>
         e.from === this.selected ? [e.to] : e.to === this.selected ? [e.from] : [],
@@ -148,6 +176,8 @@ export class AppState {
 
   /** Nodes to outline on the map: the hovered module wins over the selected one. */
   readonly highlightedNodes = $derived.by(() => {
+    // eslint-disable-next-line svelte/prefer-svelte-reactivity
+    if (this.agentFocus && !this.hoveredModule) return new Set(this.agentFocus.ids);
     const id = this.hoveredModule ?? this.module;
     // A kind outlines its nodes on the route, so its spread shows on the map.
     const ids = id
@@ -207,6 +237,7 @@ export class AppState {
 
   goto(order: number): void {
     if (order < 1 || order > this.map.stages.length) return;
+    this.agentFocus = null;
     this.#remember();
     this.stage = order;
     this.selected = null;
@@ -243,6 +274,7 @@ export class AppState {
   readonly stageProgress = $derived.by(() => this.progress[this.currentStage.id] ?? emptyProgress());
 
   setPhase(phase: Phase, step = 0): void {
+    this.agentFocus = null;
     this.phase = phase;
     this.step = Math.max(0, Math.min(step, Math.max(0, this.itemCount(phase) - 1)));
     this.selected = null;
@@ -318,6 +350,7 @@ export class AppState {
   select(id: string | null): void {
     // Selecting something the focused view hides means the user wants to see it.
     if (id && !this.visible(this.map.byId[id])) this.view = 'full';
+    this.agentFocus = null;
     this.selected = id;
     this.module = null;
     if (id) this.#clearOverviews();
@@ -325,6 +358,7 @@ export class AppState {
   }
 
   selectModule(id: string | null): void {
+    this.agentFocus = null;
     this.module = id;
     this.selected = null;
     this.hoveredModule = null;
@@ -356,11 +390,50 @@ export class AppState {
     if (id) this.showPanel();
   }
 
-  /** Closes a day, region or kind overview. */
+  /** Closes a day, region or kind overview, and the assistant's view: the learner moved on. */
   #clearOverviews(): void {
+    this.agentOpen = false;
     this.period = null;
     this.region = null;
     this.kind = null;
+  }
+
+  /**
+   * Lights up nodes on the map with a line saying why: how the assistant
+   * points. Hidden items are brought into view, as selecting them would.
+   */
+  pointAt(ids: string[], caption: string): void {
+    const known = ids.filter((id) => this.map.byId[id]);
+    if (!known.length) return;
+    if (known.some((id) => !this.visible(this.map.byId[id]))) this.view = 'full';
+    this.agentFocus = { ids: known, caption };
+  }
+
+  /** Opens or closes the assistant's view in the panel. */
+  setAgentOpen(open: boolean): void {
+    this.agentOpen = open;
+    if (open) this.showPanel();
+  }
+
+  /** Where the learner is, so a move the assistant makes can be undone. */
+  snapshot(): Place {
+    return {
+      stage: this.stage,
+      phase: this.phase,
+      step: this.step,
+      selected: this.selected,
+      module: this.module,
+      view: this.view,
+    };
+  }
+
+  /** Back to a place taken with snapshot(). */
+  returnTo(place: Place): void {
+    if (place.stage !== this.stage) this.goto(place.stage);
+    this.setPhase(place.phase, place.step);
+    this.view = place.view;
+    if (place.module) this.selectModule(place.module);
+    else this.select(place.selected);
   }
 
   /** Picking something to read about brings the details panel back if it was put away. */
