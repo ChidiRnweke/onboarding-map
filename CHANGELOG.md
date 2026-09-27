@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.0](https://github.com/ChidiRnweke/onboarding-map/compare/v0.3.0...v0.4.0) (2026-09-27)
+
+
+### Features
+
+* add a favicon set based on the radial map ([#11](https://github.com/ChidiRnweke/onboarding-map/issues/11)) ([eb2955b](https://github.com/ChidiRnweke/onboarding-map/commit/eb2955b777fd32294cc859c9acd7f6a4ae635b7a))
+* **dev:** add a drafting-prs skill and a single-shot capture script ([#9](https://github.com/ChidiRnweke/onboarding-map/issues/9)) ([516160e](https://github.com/ChidiRnweke/onboarding-map/commit/516160e04b61e076e85f0217717ea8ce543d760e))
+
 ## [0.3.0](https://github.com/ChidiRnweke/onboarding-map/compare/v0.2.0...v0.3.0) (2026-09-27)
 
 
