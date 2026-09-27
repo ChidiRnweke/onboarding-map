@@ -3,8 +3,9 @@ title: Labels
 description: Every piece of interface copy is a label; override only what differs for your audience.
 ---
 
-`labels` is the map's interface copy. Everything has an English default written for any subject;
-set only what differs for this audience. Placeholders in `{braces}` are filled by the renderer.
+`labels` changes the interface words shown to the learner. Every label has an English default, so
+most maps only need to replace a few words—for example, `period: 'Week'` for a week-long route.
+Placeholders in `{braces}` are filled by the renderer; keep them when you rewrite the sentence.
 
 ```ts
 export default defineMap({
@@ -17,9 +18,13 @@ export default defineMap({
 });
 ```
 
-Labels are merged one level deep: setting `tip.label` keeps the other `tip` defaults.
+Nested groups are merged one level deep. Setting `tip.label` keeps the other default `tip` labels;
+setting `tip: { label: 'Ask Copilot' }` replaces only that leaf.
 
 ## Groups
+
+The table names each top-level group. Most maps only need to change the audience-facing terms such
+as `period`, `intro` or `tip`; use a nested group when its default words do not fit your audience.
 
 | Group              | What it names                                                              |
 | ------------------ | ------------------------------------------------------------------------- |
@@ -47,6 +52,6 @@ Labels are merged one level deep: setting `tip.label` keeps the other `tip` defa
 | `agent`            | The assistant: its actions, its answers' caption, its setup.              |
 
 :::note
-`period` is the most common override: a week-long onboarding sets `period: 'Week'`, and the journey
-strip, stage panel and period overview all follow.
+`period` is the most common override: set it to `Week`, and the journey strip, stage panel and
+period overview use the same word.
 :::

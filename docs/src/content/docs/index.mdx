@@ -1,20 +1,20 @@
 ---
 title: Documentation
-description: Give onboarding-map your subject in one file and get a map a newcomer can follow — write it yourself or let a coding agent draft it.
+description: Put your subject in one map file. A coding agent can draft it, and onboarding-map turns it into a site a newcomer can follow.
 template: splash
 hero:
   title: Make your own onboarding map
-  tagline: Describe your subject in one file. Get a map a newcomer can follow — by hand, or let a coding agent do the first draft.
+  tagline: Your map is one data file. Give your coding agent the source material; the package turns its draft into a site a newcomer can follow.
 ---
 
 import { CardGrid, LinkCard } from '@astrojs/starlight/components';
 
 export const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
 
-Anything someone has to learn — a codebase, a cloud platform, a physics course — arrives as a pile
-of documents written for people who already know it. onboarding-map turns that pile into one
-picture: everything they will meet, and a single path through it. You bring the content; the package
-draws the map.
+A codebase, a cloud platform or a course can take weeks to learn. The map puts the important parts
+in one picture, then gives the newcomer one route through them. Its data lives in one file. A coding
+agent can draft and maintain that file from your notes, docs or codebase; onboarding-map renders it
+as a static site.
 
 <CardGrid>
   <LinkCard
@@ -25,22 +25,27 @@ draws the map.
   <LinkCard
     title="Examples"
     href={`${base}user-guide/examples/`}
-    description="Two maps, each shown with the file that made it."
+    description="Explore the maps and see the data file behind each one."
   />
   <LinkCard
     title="Get started"
     href={`${base}user-guide/getting-started/`}
-    description="From an empty folder to a map you can send."
+    description="Start a map project and have your agent draft the file."
   />
   <LinkCard
     title="Writing a map"
     href={`${base}user-guide/authoring-a-map/`}
-    description="What goes on the path, and how to write it."
+    description="What belongs in a map file, and how to shape the route."
   />
   <LinkCard
     title="Working with your agent"
     href={`${base}user-guide/working-with-your-agent/`}
-    description="Let a coding agent draft and maintain the map."
+    description="Use the installed skills to draft, edit and check your map."
+  />
+  <LinkCard
+    title="Deploy your map"
+    href={`${base}user-guide/deploying-your-map/`}
+    description="Publish the static site with GitHub Actions and Pages."
   />
   <LinkCard
     title="Reference"

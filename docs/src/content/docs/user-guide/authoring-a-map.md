@@ -1,54 +1,49 @@
 ---
 title: Writing a map
-description: The craft of a good map — what to put on the path, how to cut it into stages, and the voice to write it in.
+description: A map is one file, but a complete one is long. Use the agent skills to draft it, then shape the route and review the result.
 ---
 
-A map is one file. In TypeScript it is `export default defineMap({ … })`, and the types come from
-the package, so mistakes show up in your editor as you type. ([`map.json`](/reference/schema/) works
-too, when another tool has to write the file.)
+The map is one file: usually `map.ts`, exported with `defineMap`. A complete map can be hundreds of
+lines because it records the territory, route, stage instructions, links and sources. You can write
+it by hand, but most people should use a coding agent and the skills installed by
+[`init`](/user-guide/getting-started/).
 
-The field-by-field reference is in [the model](/reference/model/). This page is about writing a good
-one.
+Give the agent your notes, documentation, slides or codebase. The `new-map` skill guides the first
+draft; the `onboarding-map-author` skill gives it the model, conventions and writing voice. You
+decide who the learner is, what they should be able to do, and which steps belong on the route.
 
-## Put your subject on the map
+## Shape the map
 
-Start with everything a newcomer might meet, grouped into a handful of regions. Then mark each item:
+Start with the important parts of the subject and group them into a few regions. Classify each item:
 
-- the ones they will actually use go **on the path**;
-- the choices the team considered and set aside stay visible, with the reason they were not taken;
-- everything else is there so the map is honest about what exists.
+- put items the learner will use on the **path**;
+- keep useful nearby items as **context**;
+- mark real choices the team rejected as **alternatives**, and say why.
 
-A useful ratio is a small path and a lot of surroundings. The surroundings are what stop the newcomer
-wondering what they are missing.
+Keep the path selective. The territory supplies context; the path tells the learner what to do first.
 
-## Cut the path into stages
+## Make each stage usable
 
-Each stage carries one idea and ends with something the newcomer can show. If your description of a
-stage needs "and then", it is two stages.
+Give each stage one outcome and an observable checkpoint. If its task needs “and then”, split it.
+Point its waypoints and reading at the map items the learner will meet.
 
-Inside a stage, write the steps in the order they happen: do, then observe, then read. Point the
-reading at the items the path just used.
+Keep the steps in order: **do**, **observe**, then **read**. Start with something the learner can try;
+the reading will make more sense after they have seen it.
 
-## The loop while you write
+## Review the draft
 
-1. Edit the file.
-2. `npx onboarding-map validate --json` and fix every error. Each one names the part to fix.
-3. `npx onboarding-map changelog` to see what changed, and `npx onboarding-map dev` to look at it.
+Ask the agent to run the checks and show you the route. Then open the map yourself and decide what
+to change:
 
-Do not call it done while `validate` reports errors.
+```sh
+npx onboarding-map validate --json
+npx onboarding-map audit
+npx onboarding-map changelog
+npx onboarding-map dev
+```
 
-## Conventions that make a good map
+`validate` must report no errors before the map can build. `audit` points out missing or stale
+content; review its findings with your sources. Use `dev` to walk the route before sharing it.
 
-- Move around the map in one direction. Put regions in the order the path visits them; the checks
-  warn when the path doubles back.
-- Every item on the path should belong to something the journey builds, and be something the
-  newcomer is sent to. `validate` warns when it is not.
-- Keep item names short and stable. Changing an item's label is free; changing its id breaks links
-  and the progress saved in a reader's browser.
-- Bump the map's version as it changes: minor for new content, patch for fixes.
-
-## Voice
-
-Plain, concrete, second person, short sentences. Say what a thing _is for_ before what it is. No
-marketing words, no "simply", no "powerful". A summary is one to three sentences a newcomer could
-repeat to a colleague. A stage's feeling is first person ("I can…", "I know where…").
+For the full list of fields, see the [model reference](/reference/model/). For agent prompts and
+maintenance tasks, see [working with your agent](/user-guide/working-with-your-agent/).

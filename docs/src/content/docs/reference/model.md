@@ -3,8 +3,9 @@ title: The map model
 description: The OnboardingMap type — every top-level field and what it holds.
 ---
 
-The map is a single `OnboardingMap` object. The full type is in `src/core/model.ts`; this page is
-the field-by-field summary. `npx onboarding-map schema` prints the JSON Schema.
+Your `map.ts` or `map.json` exports one `OnboardingMap` object. The full TypeScript type is in
+`src/core/model.ts`; this page explains the fields. For the idea behind each part, see
+[How it works](/user-guide/how-it-works/). `npx onboarding-map schema` prints the JSON Schema.
 
 ## Top level
 
@@ -26,24 +27,44 @@ the field-by-field summary. `npx onboarding-map schema` prints the JSON Schema.
 | `edges`     | yes      | Cross-links outside the category tree.                                                       |
 | `stages`    | yes      | The journey, in order.                                                                       |
 
-## Territory
+## The territory
 
-- **`KindDef`** — `id`, `label`, `plural`, `description`. One kind is structural: `category`.
-- **`Domain`** — `id`, `label`, `tagline`, optional `summary`/`shortLabel`, `order` (0-based,
-  clockwise), `color` (hex), optional `detail`.
-- **`MapNode`** — `id`, `label`, `domain`, `kind`, `status` (`path`/`alternative`/`context`),
-  `parent` (a category id), `summary`, plus `stage` (path nodes), `alternativeTo` (alternatives),
-  `docs`, `refs`, `variants`, `detail`, `reveal`, `tags`.
-- **`Step`** — a string, or `{ text, tip?, tipKind?: 'copy'|'reveal', note?, nodes? }`.
-- **`MapEdge`** — `from`, `to`, `kind`, optional `label`.
+- **`kinds` / `KindDef`** name the subject-specific items, such as a `tool`, `law` or `concept`.
+  Each definition has an `id`, singular `label`, `plural` and `description`. The built-in kind
+  `category` groups items; do not define it yourself.
+- **`domains` / `Domain`** are the map regions. Give each an `id`, `label`, one-line `tagline`, a
+  clockwise `order` (starting at 0) and a hex `color`. `summary` and `shortLabel` are optional.
+- **`nodes` / `MapNode`** are the categories and subject items. Every node has an `id`, `label`,
+  `domain`, `kind`, `status` and `summary`. Every non-category item needs a `parent` category.
+  `status` is `path`, `context` or `alternative`; route items also name their `stage`, and
+  alternatives name the path item in `alternativeTo`. Optional fields add `docs`, source `refs`,
+  `variants`, display `detail`, a `reveal` stage and `tags`.
+- **`edges` / `MapEdge`** add cross-links outside the parent/category tree: `from`, `to`, `kind` and
+  optional display `label`.
 
-## Journey
+## The journey
 
-- **`Stage`** — `id`, `period`, `order`, `title`, `feeling`, `task`, `waypoints`, `do`, `observe`,
-  `read`, `checkpoint`, optional `delivers`, `contributes`, `bridge`, `refs`.
-- **`Goal`** — `title`, `statement`, `doneWhen`, optional `story`, and `modules`.
-- **`GoalModule`** — `id`, `title`, `purpose`, `dependsOn`, optional `relations`, `builtFrom`,
-  `produces`, optional `optional`, `refs`.
+- **`periods` / `Period`** group stages, for example into days or weeks. Each has a numeric `period`,
+  a `title` and optional `summary`.
+- **`stages` / `Stage`** make up the route. A stage has an `id`, `period`, `order`, `title`,
+  first-person `feeling`, `task`, `waypoints`, `do`, `observe`, `read` and a `checkpoint`. Optional
+  `delivers` and `contributes` connect it to goal modules; `bridge` explains its place in the goal.
+- A **`Step`** is a string, or `{ text, tip?, tipKind?: 'copy'|'reveal', note?, nodes? }`. A `tip`
+  adds a prompt, hint or answer; `note` gives the learner a place to write; `nodes` link the step to
+  map items.
+- **`goal` / `Goal`** describes the finished result with `title`, `statement`, `doneWhen`, optional
+  `story` and `modules`.
+- **`GoalModule`** has an `id`, `title`, `purpose`, `dependsOn`, `builtFrom` node ids and `produces`.
+  Optional `relations` name how modules connect; `optional` marks a module the learner can skip.
+
+## Sources and interface copy
+
+`documents` lists the source material behind a map. `refs` on nodes, stages and goal modules point
+back to those documents; `docLink` creates learner-facing links, while `ref` cites the source used
+to write the map.
+
+`labels` overrides interface text. See the [labels reference](/reference/labels/) for the groups and
+the [JSON Schema page](/reference/schema/) for `map.json` editor support.
 
 :::tip
 `defineMap`, `docLink`, `todoLink` and `ref` are exported by the package. Use them to keep a map

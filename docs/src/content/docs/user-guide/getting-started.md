@@ -1,62 +1,66 @@
 ---
 title: Get started
-description: From an empty folder to a map you can send.
+description: Create a map project, ask your agent for a first draft, check it and build the site.
 ---
 
-You need Node 22.18 or later, and a subject you want to onboard someone into.
+You need Node 22.18 or later, a subject to map, and material your coding agent can use: notes,
+documentation, slides, a syllabus or a codebase.
 
-## Start a project
+## Create the project
 
 ```sh
 npx onboarding-map init my-map
-cd my-map && npm install
+cd my-map
+npm install
 ```
 
-That gives you one file, `map.ts`, holding a short example map, plus the agent skills and a few
-scripts. The name of the file is set in `onboarding-map.config.json`.
+`init` creates `map.ts`, installs the map-writing skills for your agent, and adds the project
+commands. In a terminal, it asks where to install the skills. If you run it from a non-interactive
+shell, pass `--target agents` (or the folder your agent reads). You can start from the longer Physics
+example with `npx onboarding-map init my-map --template physics`.
 
-## Put your subject in
+## Ask your agent for a draft
 
-Open `map.ts`. It starts as a tiny example — a couple of regions and two stages. Replace it with
-your subject, or ask your coding agent to:
+Give your agent the source material and ask it to make the map:
 
-> Turn these notes into an onboarding map.
+> Read these notes and make an onboarding map for a new teammate. Draft the map in `map.ts`, run
+> `npx onboarding-map validate --json`, and show me the route and anything you could not verify.
 
-Point the agent at your material (notes, slides, a syllabus, a codebase). It drafts the file; you
-decide what belongs on the path. See [working with your agent](/user-guide/working-with-your-agent/).
+The agent writes the file; you decide what belongs on the route and whether its sources support the
+content. See [working with your agent](/user-guide/working-with-your-agent/) for prompts and the
+installed skills.
 
-## See it while you write
+## Review the map
 
 ```sh
-npx onboarding-map dev        # http://localhost:4321
+npx onboarding-map dev
 ```
 
-The page reloads on every save. When something in the file does not add up, the page says so instead
-of showing the map.
+Open the local address printed by the command. The site reloads when `map.ts` changes and reports
+validation errors in the page. Walk the route and ask the agent to revise any part that does not
+make sense.
 
-## Check it
+Before sharing, check the references and review the agent's change summary:
 
 ```sh
-npx onboarding-map validate   # every reference resolves; exit 1 if not
-npx onboarding-map audit      # stale or unfinished content
+npx onboarding-map validate
+npx onboarding-map audit
+npx onboarding-map changelog
 ```
 
-Fix what `validate` reports. `audit` never fails the build — it is a to-do list: dead links, sources
-that changed, items nobody is sent to.
+`validate` catches broken references and stops an invalid build. `audit` lists unfinished or possibly
+stale content. `changelog` summarizes what changed for you to review.
 
-## Send it
+## Build the site
 
 ```sh
-npx onboarding-map build      # writes the site to ./dist
+npx onboarding-map build
 ```
 
-Upload `dist/` to any static host. That is the map the newcomer opens.
+The command writes the finished site to `dist/`. For a free GitHub Pages deployment, follow
+[Deploying your map](/user-guide/deploying-your-map/).
 
 :::tip
-Start from a finished example instead of an empty one:
-
-```sh
-npx onboarding-map init my-map --template physics
-```
-
+The map is one file, but a complete map takes real writing. Start with the agent and its skills
+rather than trying to fill in every field yourself.
 :::
