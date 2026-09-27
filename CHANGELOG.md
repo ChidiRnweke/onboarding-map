@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/ChidiRnweke/onboarding-map/compare/v0.2.0...v0.3.0) (2026-09-27)
+
+
+### Features
+
+* **app:** add attribution badge to the map view ([#7](https://github.com/ChidiRnweke/onboarding-map/issues/7)) ([407a242](https://github.com/ChidiRnweke/onboarding-map/commit/407a242e1376b86edd81640a8232ce7421d93998))
+
 ## [0.2.0](https://github.com/ChidiRnweke/onboarding-map/compare/v0.1.1...v0.2.0) (2026-09-27)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "onboarding-map",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "An onboarding map for any subject: a territory to recognise, a route to follow. Bring your own data; your coding agent writes it.",
   "keywords": [
     "onboarding",
