@@ -17,7 +17,7 @@ or `npx` command.
 | `src/routes/`, `src/lib/` | The app: a static shell that fetches `map.json` at runtime and renders it.                                                                                                                                          |
 | `templates/`              | Maps that `init --template` copies. `starter` is minimal; `physics` is a complete example outside software.                                                                                                         |
 | `skills/`                 | **Product, not instructions for working here.** Skills shipped to map authors' coding agents by `init` and `skills install`, into `.claude/skills`, `.agents/skills` and/or `.codex/skills` (`src/cli/targets.ts`). |
-| `tools/`                  | Visual regression: `shoot.mjs` screenshots two served builds, `diff.mjs` pixel-diffs them.                                                                                                                          |
+| `tools/`                  | Visual regression: `shoot.mjs` screenshots two served builds, `diff.mjs` pixel-diffs them. `capture.mjs` takes a single-state screenshot for PR evidence.                                                           |
 
 `npm run build` compiles `src/core` + `src/cli` with `tsc` to `dist/core` and `dist/cli`, generates
 `schema/map.schema.json` from `OnboardingMap`, and builds the shell to `dist/app`. The CLI copies
@@ -80,7 +80,8 @@ they stay inside the repository.
 - One PR per coherent task. Commit conventionally, push the branch, and open the PR with
   `gh pr create --head <branch> --title "<type(scope): subject>"` and a body following
   `.github/pull_request_template.md`: **Why**, **What changed**, **Evidence**, **Validation**,
-  in short, plain sentences. Explain behavior before and after, not a file inventory.
+  in short, plain sentences. Explain behavior before and after, not a file inventory. Read
+  `.claude/skills/drafting-prs/SKILL.md` before writing the body.
 - A PR is done when `check` (build, type check, lint, templates validate), `commitlint` and
   `pr-title` pass. Run `npm run build && npm run check && npm run lint` locally first.
 - Address review by committing, or by rebasing and pushing with `--force-with-lease`.
@@ -109,6 +110,9 @@ run"). A release PR whose checks show as waiting is not failing; ask the maintai
 - App: build a map with this branch and with `main`, serve both, and compare:
   `node tools/shoot.mjs <new-url> <out> --baseline <main-url>` then `node tools/diff.mjs <out>`
   (needs `npx playwright install chromium` once). Put before/after captures in the PR. The
-  `--states` selectors are stale; drive interactions yourself when they matter.
+  `--states` selectors are stale; drive interactions yourself when they matter. For a single
+  state — a quick check, or one evidence screenshot — use `node tools/capture.mjs <url> <out.png>`
+  instead of a one-off script; see `.claude/skills/drafting-prs/SKILL.md` for reaching a specific
+  stage/phase/step and sidebar state.
 - A change to the model or to what the CLI prints can break map authors' agents: update the
   matching `skills/*/SKILL.md` in the same PR.
