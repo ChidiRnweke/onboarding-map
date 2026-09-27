@@ -67,22 +67,24 @@ export default defineConfig({
           label: 'User guide',
           items: [
             'user-guide/overview',
+            'user-guide/how-it-works',
             'user-guide/getting-started',
-            {
-              label: 'Writing a map',
-              items: [
-                'user-guide/authoring-a-map',
-                'user-guide/new-map',
-                'user-guide/edit-map',
-                'user-guide/refresh-stale',
-              ],
-            },
-            'user-guide/cli',
-            {
-              label: 'Reference',
-              items: ['user-guide/model', 'user-guide/labels', 'user-guide/schema'],
-            },
+            'user-guide/authoring-a-map',
+            'user-guide/examples',
             'user-guide/working-with-your-agent',
+          ],
+        },
+        {
+          label: 'Reference',
+          items: [
+            'reference/model',
+            'reference/cli',
+            'reference/labels',
+            'reference/schema',
+            {
+              label: 'Agent workflows',
+              items: ['reference/new-map', 'reference/edit-map', 'reference/refresh-stale'],
+            },
           ],
         },
         {

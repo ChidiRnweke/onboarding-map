@@ -6,7 +6,8 @@ schema
 *.tgz
 artifacts
 
-# The docs site: build output and the generated live-map embed.
+# The docs site: build output and the generated live-map embeds.
 docs/.astro
 docs/dist
 docs/public/embed
+docs/public/examples

@@ -42,7 +42,7 @@ URL.
 The docs build includes a live map, so it depends on the package. Verify both:
 
 ```sh
-npm run docs:embed                  # build the physics template into docs/public/embed
+npm run docs:embed                  # build the example maps into docs/public/embed
 npm --prefix docs run build         # type-check and build the docs
 ```
 

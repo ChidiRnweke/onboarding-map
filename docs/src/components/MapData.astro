@@ -1,0 +1,183 @@
+---
+import { Code } from 'astro:components';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+
+interface Props {
+  /** Example folder built by `npm run docs:embed`: starter, physics or project. */
+  name: string;
+  /** The map's `id`, used to seed its "intro seen" flag. Defaults to `name`. */
+  mapId?: string;
+  title: string;
+  caption?: string;
+}
+
+const { name, mapId = name, title, caption } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
+const embedSrc = `${base}embed/${name}/`;
+const download = `${base}examples/${name}.ts`;
+
+// The source is copied next to the build by `npm run docs:embed`. If it is not
+// there yet, say so instead of failing the whole build.
+let source: string;
+try {
+  source = readFileSync(resolve(process.cwd(), 'public/examples', `${name}.ts`), 'utf8');
+} catch {
+  source = '// Run `npm run docs:embed` to generate the example data.';
+}
+---
+
+<script is:inline define:vars={{ mapId }}>
+  // The app opens its "big picture" intro on a first visit, which would cover
+  // the map. Mark it seen for this map before the iframe below starts loading.
+  try {
+    localStorage.setItem(`onboarding-map:${mapId}:intro-seen`, 'true');
+  } catch {}
+</script>
+
+<figure class="om-mapdata">
+  <figcaption>
+    <span class="om-mapdata__title">{title}</span>
+    {caption && <span class="om-mapdata__caption">{caption}</span>}
+  </figcaption>
+  <div class="om-mapdata__grid">
+    <div class="om-mapdata__pane">
+      <div class="om-mapdata__head">
+        <span>Map</span>
+        <a href={embedSrc} target="_blank" rel="noopener">Open full screen</a>
+      </div>
+      <div class="om-mapdata__frame">
+        <iframe
+          data-om-embed
+          src={embedSrc}
+          title={`${title} — live map`}
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+    <div class="om-mapdata__pane">
+      <div class="om-mapdata__head">
+        <span>Data</span>
+        <a href={download} download>{name}.ts</a>
+      </div>
+      <div class="om-mapdata__code">
+        <div class="om-code om-code--light"><Code code={source} lang="ts" theme="github-light" wrap /></div>
+        <div class="om-code om-code--dark"><Code code={source} lang="ts" theme="github-dark" wrap /></div>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<script>
+  // Keep every embedded map in step with the docs' light/dark toggle. Same
+  // origin, so mirror Starlight's data-theme onto each frame's root.
+  const frames = document.querySelectorAll<HTMLIFrameElement>('iframe[data-om-embed]');
+  const sync = () => {
+    const dark = document.documentElement.dataset.theme === 'dark';
+    for (const frame of frames) {
+      const root = frame.contentDocument?.documentElement;
+      if (!root) continue;
+      root.classList.toggle('dark', dark);
+      root.classList.toggle('light', !dark);
+    }
+  };
+  for (const frame of frames) frame.addEventListener('load', sync);
+  new MutationObserver(sync).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  });
+  sync();
+</script>
+
+<style>
+  .om-mapdata {
+    margin: 1.5rem 0 2.5rem;
+  }
+  .om-mapdata figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-bottom: 0.6rem;
+  }
+  .om-mapdata__title {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    color: var(--ink);
+  }
+  .om-mapdata__caption {
+    font-size: 0.875rem;
+    color: var(--ink-2);
+  }
+
+  .om-mapdata__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+
+  .om-mapdata__pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-xl);
+    background: var(--panel);
+    overflow: hidden;
+  }
+  .om-mapdata__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 0.85rem;
+    border-bottom: 1px solid var(--rule-soft);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--ink-2);
+  }
+  .om-mapdata__head a {
+    text-transform: none;
+    letter-spacing: 0;
+    color: var(--route);
+    text-decoration: none;
+    font-size: 0.8125rem;
+  }
+  .om-mapdata__head a:hover {
+    text-decoration: underline;
+  }
+  .om-mapdata__frame iframe {
+    display: block;
+    width: 100%;
+    height: min(72vh, 620px);
+    border: 0;
+    background: var(--paper);
+  }
+  .om-mapdata__code {
+    height: min(72vh, 620px);
+    overflow: auto;
+    background: var(--paper-2);
+  }
+  .om-mapdata__code :global(pre.astro-code) {
+    margin: 0;
+    border-radius: 0;
+    border: 0;
+    background: transparent !important;
+    min-height: 100%;
+  }
+  .om-code--dark {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .om-code--light {
+    display: none;
+  }
+  :global(:root[data-theme='dark']) .om-code--dark {
+    display: block;
+  }
+
+  @media (min-width: 64rem) {
+    .om-mapdata__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+</style>

@@ -1,12 +1,12 @@
 # onboarding-map
 
-An onboarding map for any subject: a radial map of everything a newcomer will meet, with one highlighted route through it, walked in stages of _do → observe → read_. You bring the content as one file; the package renders it as a static site.
+An onboarding map for any subject: a radial map of everything a newcomer will meet, with one path through it, walked by doing first and reading after. You describe the subject in one file and the package renders it as a static site — write it yourself, or give your notes, slides and docs to a coding agent and let it draft the map for you.
 
 ![An onboarding map for a cloud team: regions of the map around a centre, the route of the first stage highlighted, and the stage panel with the goal as a diagram](https://raw.githubusercontent.com/ChidiRnweke/onboarding-map/main/docs/public/screenshot.png)
 
-**[Documentation](https://chidirnweke.github.io/onboarding-map/)** — the user guide, the map model, and the contributor guide.
+**[Documentation](https://chidirnweke.github.io/onboarding-map/)** — the user guide, two worked examples shown with their data, and the contributor guide.
 
-You don't need a CMS: your coding agent writes and maintains the map, using skills this package installs, and the CLI checks its work.
+There is no CMS and nothing to host beyond static files: the map is one file (`map.ts` or `map.json`), the CLI checks it, and a reader's progress stays in their own browser.
 
 ```sh
 npx onboarding-map init my-map            # asks which coding agents get the skills; or --target, --template physics

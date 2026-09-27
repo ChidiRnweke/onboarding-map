@@ -57,7 +57,7 @@
     "format": "prettier --write .",
     "docs:dev": "npm --prefix docs run dev",
     "docs:build": "npm --prefix docs run build",
-    "docs:embed": "ONBOARDING_BASE=/onboarding-map/embed/physics npm run build && node dist/cli/index.js build --map templates/physics.ts --out docs/public/embed/physics"
+    "docs:embed": "node tools/embed-maps.mjs"
   },
   "dependencies": {
     "@clack/prompts": "^1.8.1",

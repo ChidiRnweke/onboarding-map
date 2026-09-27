@@ -28,7 +28,7 @@ Each finding has a `kind`, a `path` into the map, and a `message`:
 
 Group by kind, fix, and run `npx onboarding-map validate --json` after each batch. Don't restructure
 the journey here — if the audit reveals a structural problem (a stage no longer makes sense), stop
-and propose it to the human; it's an [edit](/user-guide/edit-map/) job.
+and propose it to the human; it's an [edit](/reference/edit-map/) job.
 
 ## 3. Report
 

@@ -1,48 +1,32 @@
 ---
-title: Overview
-description: What an onboarding map is, the two layers it keeps apart, and the do → observe → read method.
+title: Why an onboarding map
+description: The problem it solves, and the idea behind the map.
 ---
 
-An onboarding map shows a newcomer everything in a subject — a cloud platform, a codebase,
-introductory physics — as a radial map, with one highlighted route through it. The learner follows
-the route in stages; the rest of the map is territory to _recognise_, not learn.
+Everything a newcomer needs is already written down — a wiki, a repository, a folder of recorded
+calls — but as separate documents for people who know the system. It explains how things work; it
+doesn't say where to start, what matters this week, or what can wait.
+
+onboarding-map makes the map the easy part. You describe your subject in one file: the things a
+newcomer will meet, and one path through them. Write it yourself, or hand your notes, slides and
+docs to a coding agent and let it draft it — the skills in this package tell it how.
 
 ![An onboarding map for a cloud team: regions of the map around a centre, the route of the first stage highlighted, and the stage panel with the goal as a diagram](/screenshot.png)
 
-The map keeps two layers apart:
+## Why not just a reading list
 
-**Territory** — everything a newcomer might meet.
-
-- **Regions** (`domains`) are the slices of the map, ordered clockwise from 12 o'clock.
-- **Categories** are the groups inside a region.
-- **Items** are the individual things. Each is one of three things:
-  - on the **route** (`path`) — the learner touches it during onboarding;
-  - an **alternative** — a real choice the team did not pick;
-  - **context** — worth knowing it exists, not required.
-
-**Journey** — the route through the territory.
-
-- **Stages** are walked in order, grouped into periods (a day, a week).
-- Each stage is a **do → observe → read** pass over a few route items, and ends with a checkpoint:
-  how the learner knows they are done.
-- A stage **delivers** part of the **goal** — the finished thing the journey builds, told as a
-  handful of modules the learner can see assembled.
-
-## Why a coding agent writes it
-
-You do not write the map by hand, and you do not need a CMS. Your coding agent writes and maintains
-the map from your source material (notes, docs, slides, a codebase), using the skills the package
-installs. The CLI checks its work: every reference must resolve, and `audit` finds stale content.
+A reading list gives an order but no surroundings. A wiki gives surroundings but no order. A map of
+a subject does both at once: the newcomer sees everything that exists, so nothing feels hidden, and
+follows a single path through it, so they never have to decide what to learn next.
 
 ## What you get
 
-A static site: a prebuilt shell plus your `map.json`. Serve it from any static host. A learner's
-progress, notes and "seen the big picture" flag are kept in their own browser, so there is no
-server and no account.
+A static site you can send to the newcomer. There is no server and no account; their progress, notes
+and place in the map are kept in their own browser.
 
 :::tip
-The quickest way to see one is the live map on the [home page](/). It is the `physics` template —
-a complete example outside software.
+The fastest way to understand it is to look at one. The [examples](/user-guide/examples/) show two
+maps next to the files that made them.
 :::
 
-Next: [get started](/user-guide/getting-started/).
+Next: [how it works](/user-guide/how-it-works/).
