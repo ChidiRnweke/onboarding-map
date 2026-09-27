@@ -18,6 +18,7 @@ Your `map.ts` or `map.json` exports one `OnboardingMap` object. The full TypeScr
 | `motto`     | yes      | One line under the title.                                                                    |
 | `labels`    | no       | Interface copy; anything left out uses the English defaults.                                 |
 | `goal`      | no       | The finished thing the journey builds. A map without a goal still works as a plain journey.  |
+| `assistant` | no       | Settings for the agent that helps learners along the route; on unless `enabled: false`. See [the assistant](/user-guide/the-assistant/). |
 | `kinds`     | yes      | The kinds of item this map uses (`category` is built in).                                    |
 | `periods`   | no       | Names for the groups stages fall into (a day, a week).                                       |
 | `documents` | no       | The source documents that `refs` point at.                                                   |

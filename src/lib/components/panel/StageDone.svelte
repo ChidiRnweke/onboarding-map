@@ -1,4 +1,5 @@
 <script lang="ts">
+  import AgentHere from '../agent/AgentHere.svelte';
   import { getAppState } from '$lib/state.svelte';
   import BigPicture from '../goal/BigPicture.svelte';
   import Markup from '../ui/Markup.svelte';
@@ -32,6 +33,7 @@
 <p class="type-body m-0 rounded-xl border-[1.5px] border-dashed border-route px-4 py-3 text-ink">
   <b class="type-heading mb-1 block text-route">{labels.checkpoint}</b><Markup text={stage.checkpoint} />
 </p>
+<AgentHere anchor={{ kind: 'checkpoint', stage: stage.id }} title="{stage.title} · {labels.checkpoint}" />
 
 {#if notes.length}
   <PanelSection heading={labels.bigPicture.yourNotes}>

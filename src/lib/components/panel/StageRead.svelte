@@ -2,6 +2,7 @@
   import CheckIcon from '@lucide/svelte/icons/check';
   import { getAppState } from '$lib/state.svelte';
   import { getTheme } from '$lib/theme.svelte';
+  import AgentHere from '../agent/AgentHere.svelte';
 
   // Read, after the doing: each concept the stage touched, named, placed in the
   // part of the goal it belongs to, and opened in the panel with its docs.
@@ -55,3 +56,8 @@
     </li>
   {/each}
 </ul>
+
+<AgentHere
+  anchor={{ kind: 'read', stage: app.currentStage.id }}
+  title="{app.currentStage.title} · {labels.phases.read}"
+/>

@@ -49,6 +49,7 @@ as `period`, `intro` or `tip`; use a nested group when its default words do not 
 | `region`           | The region view.                                                          |
 | `kind`             | The kind view.                                                            |
 | `sources`          | Display names for `DocLink.source` keys (e.g. `vendor: 'Official docs'`). |
+| `agent`            | The assistant: its actions, its answers' caption, its setup.              |
 
 :::note
 `period` is the most common override: set it to `Week`, and the journey strip, stage panel and

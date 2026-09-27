@@ -126,6 +126,32 @@ export const DEFAULT_LABELS: Labels = {
     elsewhere: 'Elsewhere on the map',
   },
   sources: { vendor: 'Official docs', community: 'Community', internal: 'Internal' },
+  agent: {
+    walkThrough: 'Walk me through it',
+    explainNode: 'Explain for this stage',
+    explainLink: 'Explain connection',
+    takeaways: 'What to take away',
+    checkMe: 'Check my understanding',
+    fit: 'How does this fit?',
+    summarize: 'Summarise this region',
+    checkNote: 'Check what I noticed',
+    ask: 'Ask about the map',
+    context: 'Before it answers, the agent reads this map and knows you are at {place}.',
+    followUp: 'Ask a follow-up',
+    provenance: 'Explained by {model}, not from the map',
+    earlier: 'Asked earlier',
+    back: 'Back to where you were',
+    stop: 'Stop',
+    retry: 'Try again',
+    accept: 'Yes',
+    decline: 'Not now',
+    setup: 'Set up your agent',
+    setupIntro:
+      'Pick where your model runs. Your key stays in this browser and is sent only to that provider.',
+    test: 'Test and continue',
+    settings: 'Agent settings',
+    forget: 'Forget this key',
+  },
 };
 
 /** The map's own copy over the defaults, one level deep (every group is flat). */

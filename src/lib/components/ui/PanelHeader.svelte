@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
+  import { getAgent } from '$lib/agent/agent.svelte';
 
   // The top of every panel, so they all share one rhythm: the way back (or
   // the tour), then the context the thing sits in, its title, and chips that
@@ -19,12 +20,15 @@
     /** A smaller title, for panels whose content is the point (a stage mid-way). */
     compact?: boolean;
   } = $props();
+
+  // The assistant's button sits beside the theme toggle; the row keeps clear of both.
+  const twoButtons = getAgent()?.enabled ?? false;
 </script>
 
 <header class="mb-6">
   {#if nav}
-    <!-- Right padding keeps the row clear of the theme toggle over the panel. -->
-    <div class="mb-6 flex min-h-8 items-center gap-3 pr-10">{@render nav()}</div>
+    <!-- Right padding keeps the row clear of the toggles over the panel. -->
+    <div class="mb-6 flex min-h-8 items-center gap-3 {twoButtons ? 'pr-22' : 'pr-10'}">{@render nav()}</div>
   {/if}
   {#if context}
     <div class="type-meta mb-3 flex flex-wrap items-center gap-1 text-ink-2">{@render context()}</div>

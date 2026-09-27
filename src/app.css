@@ -9,6 +9,10 @@
 @import 'tailwindcss/utilities.css' layer(utilities);
 /* Enter/exit animations used by the shadcn-svelte popover, sheet and tooltip. */
 @import 'tw-animate-css';
+/* The assistant renders answers with streamdown-svelte, whose styles are
+   Tailwind classes inside the package; Tailwind does not scan node_modules. */
+@source '../node_modules/streamdown-svelte/dist';
+@source '../node_modules/@streamdown-svelte/code/dist';
 
 /* bits-ui marks state as data-state="open" / "checked"; the shadcn-svelte
    components style it through these variants (what `shadcn-svelte init` would
@@ -116,6 +120,10 @@
   --wash: 0.13;
   --serif: 'Newsreader Variable', 'Newsreader', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --sans: 'Archivo Variable', 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  /* Raw names some shadcn-style components read directly (the assistant's
+     shimmer), bridged like the utilities above so they follow the switch. */
+  --foreground: var(--ink);
+  --muted-foreground: var(--ink-2);
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
   color-scheme: light;
@@ -151,6 +159,20 @@
   --fog: 0.2;
   --wash: 0.11;
   color-scheme: dark;
+}
+/* The assistant's "thinking" shimmer (sv-prompt-kit text-shimmer). */
+@keyframes shimmer {
+  from {
+    background-position: 100% center;
+  }
+  to {
+    background-position: 0% center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-\[shimmer_4s_infinite_linear\] {
+    animation: none;
+  }
 }
 /* Page-level defaults on top of preflight. They sit in @layer base with it:
    unlayered CSS outranks every layer and would override the utilities. */

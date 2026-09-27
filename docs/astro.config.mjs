@@ -73,6 +73,7 @@ export default defineConfig({
             'user-guide/examples',
             'user-guide/working-with-your-agent',
             'user-guide/deploying-your-map',
+            'user-guide/the-assistant',
           ],
         },
         {

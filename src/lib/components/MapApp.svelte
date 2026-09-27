@@ -4,6 +4,7 @@
   import { load, mapKey, parseHash, save, toHash } from '$lib/progress';
   import * as Sidebar from '$lib/components/shadcn/sidebar/index.js';
   import { loadOpen, saveOpen } from '$lib/sidebars';
+  import { setAgent } from '$lib/agent/agent.svelte';
   import { setAppState } from '$lib/state.svelte';
   import { setTheme } from '$lib/theme.svelte';
   import BigPictureIntro from './goal/BigPictureIntro.svelte';
@@ -20,6 +21,7 @@
   const app = setAppState(map);
   // svelte-ignore state_referenced_locally
   setTheme(map);
+  const agent = setAgent(app);
 
   // The panel starts open; a visitor's own choice is only known once mounted.
   let panelOpen = $state(true);
@@ -43,6 +45,7 @@
     // Open where the address points, or where the learner left off. The big
     // picture comes first on a first visit.
     app.restore(parseHash(location.hash));
+    agent.restore();
     restored = true;
     if (map.goal && !load(mapKey(map), 'intro-seen', false)) app.introOpen = true;
   });
@@ -87,6 +90,7 @@
       else app.back();
     }
     if (event.key === 'Escape') {
+      app.agentFocus = null;
       app.selectModule(null);
       app.select(null);
       app.selectPeriod(null);

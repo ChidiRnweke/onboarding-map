@@ -13,6 +13,8 @@
   import PanelSection from '../ui/PanelSection.svelte';
   import RefsSection from '../ui/RefsSection.svelte';
   import Template from '../ui/Template.svelte';
+  import AgentHere from '../agent/AgentHere.svelte';
+  import { getAgent } from '$lib/agent/agent.svelte';
   import type { DerivedNode } from '$core/model';
 
   // One concept: what it is (a lead sentence, then the detail), where it fits
@@ -69,6 +71,14 @@
     ),
   );
   const alternatives = $derived(app.map.nodes.filter((n) => n.alternativeTo === node.id).map((n) => n.id));
+  const agent = getAgent();
+  // With the assistant on, each link gets its own row, so it can be explained where it is.
+  const links = $derived(
+    app.map.edges
+      .filter((e) => e.from === node.id || e.to === node.id)
+      .map((e) => ({ ...e, verb: verb(e.kind, e.label), other: e.from === node.id ? e.to : e.from })),
+  );
+  const linkTitle = (from: string, to: string) => `${app.map.byId[from].label} → ${app.map.byId[to].label}`;
 
   const chip = 'type-small inline-flex items-center gap-1 rounded-full px-3 py-1';
   const verb_ = 'type-small font-serif text-ink-2 italic';
@@ -174,6 +184,9 @@
 {#if summary.rest}
   <p class="type-body m-0 mt-3 text-ink-2"><Markup text={summary.rest} /></p>
 {/if}
+{#if node.kind !== 'category'}
+  <AgentHere anchor={{ kind: 'node', id: node.id }} title={node.label} />
+{/if}
 
 {#if partOf.length}
   <!-- Where this sits in the big picture: the part of the goal it belongs to,
@@ -218,18 +231,45 @@
        "uses → Providers", "GitHub Copilot → researches through it". -->
   <PanelSection heading={labels.node.connections}>
     <div class="grid gap-2">
-      {#each outgoing as row (row.verb)}
-        <p class="m-0 flex flex-wrap items-center gap-2">
-          <span class={verb_}>{row.verb}</span>
-          {#each row.ids as id (id)}<NodeChip {id} />{/each}
-        </p>
-      {/each}
-      {#each incoming as row (row.verb)}
-        <p class="m-0 flex flex-wrap items-center gap-2">
-          {#each row.ids as id (id)}<NodeChip {id} />{/each}
-          <span class={verb_}>{row.verb} {labels.node.incomingSuffix}</span>
-        </p>
-      {/each}
+      {#if agent.enabled}
+        <!-- One row per link, each with its own "explain" action and its answer under it. -->
+        {#each links as e (e.from + '>' + e.to)}
+          <div>
+            <p class="m-0 flex flex-wrap items-center gap-2">
+              {#if e.from === node.id}
+                <span class={verb_}>{e.verb}</span><NodeChip id={e.other} />
+              {:else}
+                <NodeChip id={e.other} /><span class={verb_}>{e.verb} {labels.node.incomingSuffix}</span>
+              {/if}
+              <span class="ml-auto">
+                <AgentHere
+                  anchor={{ kind: 'edge', from: e.from, to: e.to }}
+                  title={linkTitle(e.from, e.to)}
+                  variant="compact"
+                />
+              </span>
+            </p>
+            <AgentHere
+              anchor={{ kind: 'edge', from: e.from, to: e.to }}
+              title={linkTitle(e.from, e.to)}
+              variant="thread"
+            />
+          </div>
+        {/each}
+      {:else}
+        {#each outgoing as row (row.verb)}
+          <p class="m-0 flex flex-wrap items-center gap-2">
+            <span class={verb_}>{row.verb}</span>
+            {#each row.ids as id (id)}<NodeChip {id} />{/each}
+          </p>
+        {/each}
+        {#each incoming as row (row.verb)}
+          <p class="m-0 flex flex-wrap items-center gap-2">
+            {#each row.ids as id (id)}<NodeChip {id} />{/each}
+            <span class={verb_}>{row.verb} {labels.node.incomingSuffix}</span>
+          </p>
+        {/each}
+      {/if}
       {#if alternatives.length}
         <p class="m-0 flex flex-wrap items-center gap-2">
           <span class={verb_}>{labels.node.alternatives.toLowerCase()}</span>

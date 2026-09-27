@@ -35,6 +35,14 @@ export default ts.config(
     },
   },
   {
+    // sv-prompt-kit components, added from its registry with shadcn-svelte and
+    // kept as published so a later `add --overwrite` updates them cleanly.
+    files: ['src/lib/components/ai/**'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
+    },
+  },
+  {
     ignores: ['build/', '.svelte-kit/', 'dist/', 'node_modules/', 'artifacts/', 'schema/', 'docs/'],
   },
 );
