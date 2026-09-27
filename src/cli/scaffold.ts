@@ -1,15 +1,18 @@
 import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename, join, relative } from 'node:path';
+import { basename, join } from 'node:path';
 import { CONFIG_FILE, SKILLS_DIR, TEMPLATES_DIR, VERSION } from './paths.ts';
+import { SKILL_TARGETS, type SkillTarget } from './targets.ts';
 
 export const TEMPLATES = () => readdirSync(TEMPLATES_DIR).map((f) => basename(f, '.ts'));
 
 /**
  * Starts a project in `dir`: a map from a template, the config, a package.json
- * that depends on onboarding-map (unless one exists), and the agent skills.
- * Never overwrites a file that is already there.
+ * that depends on onboarding-map (unless one exists), and the agent skills in
+ * each of `targets`. Never overwrites a file that is already there.
  */
-export function init(dir: string, template: string): string[] {
+export function init(dir: string, template: string, targets: SkillTarget[]): string[] {
+  const source = join(TEMPLATES_DIR, `${template}.ts`);
+  if (!existsSync(source)) throw new Error(`No template '${template}'. Available: ${TEMPLATES().join(', ')}`);
   const done: string[] = [];
   mkdirSync(dir, { recursive: true });
   const write = (name: string, content: string) => {
@@ -19,8 +22,6 @@ export function init(dir: string, template: string): string[] {
     done.push(`created ${name}`);
   };
 
-  const source = join(TEMPLATES_DIR, `${template}.ts`);
-  if (!existsSync(source)) throw new Error(`No template '${template}'. Available: ${TEMPLATES().join(', ')}`);
   write('map.ts', readFileSync(source, 'utf8'));
   write(CONFIG_FILE, JSON.stringify({ map: './map.ts', out: './dist' }, null, 2) + '\n');
   write(
@@ -45,7 +46,7 @@ export function init(dir: string, template: string): string[] {
     ) + '\n',
   );
   write('.gitignore', 'node_modules\ndist\n');
-  done.push(...installSkills(dir));
+  done.push(...installSkills(dir, targets));
   return done;
 }
 
@@ -53,19 +54,21 @@ const AGENTS_START = '<!-- onboarding-map:start -->';
 const AGENTS_END = '<!-- onboarding-map:end -->';
 
 /**
- * Copies the skills into .claude/skills/ (Claude Code picks them up there) and
- * points to them from AGENTS.md, which other coding agents read. Re-running
- * replaces both with the installed version's.
+ * Copies the skills into each target folder, where that coding agent picks
+ * them up, and points to them from AGENTS.md, which most agents read.
+ * Re-running replaces both with the installed version's.
  */
-export function installSkills(dir: string): string[] {
+export function installSkills(dir: string, targets: SkillTarget[]): string[] {
+  if (!targets.length) return [];
   const done: string[] = [];
-  const target = join(dir, '.claude/skills');
   const skills = readdirSync(SKILLS_DIR, { withFileTypes: true }).filter((d) => d.isDirectory());
-  for (const s of skills) {
-    cpSync(join(SKILLS_DIR, s.name), join(target, s.name), { recursive: true });
-    done.push(`installed skill ${relative(dir, join(target, s.name))}`);
+  for (const t of targets) {
+    for (const s of skills)
+      cpSync(join(SKILLS_DIR, s.name), join(dir, SKILL_TARGETS[t], s.name), { recursive: true });
+    done.push(`installed ${skills.length} skills in ${SKILL_TARGETS[t]}/`);
   }
 
+  const [first, ...rest] = targets.map((t) => SKILL_TARGETS[t]);
   const section = [
     AGENTS_START,
     '## Onboarding map',
@@ -73,7 +76,8 @@ export function installSkills(dir: string): string[] {
     'This project is an onboarding map (the `onboarding-map` package). The map is the file named in',
     `\`${CONFIG_FILE}\` (default \`map.ts\`). Before editing it, read the skill that fits the task:`,
     '',
-    ...skills.map((s) => `- \`.claude/skills/${s.name}/SKILL.md\``),
+    ...skills.map((s) => `- \`${first}/${s.name}/SKILL.md\``),
+    ...(rest.length ? ['', `The same skills are in ${rest.map((r) => `\`${r}/\``).join(' and ')}.`] : []),
     '',
     'After every edit run `npx onboarding-map validate --json` and fix what it reports.',
     AGENTS_END,

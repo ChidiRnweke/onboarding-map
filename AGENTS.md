@@ -10,14 +10,14 @@ or `npx` command.
 
 ## Where things live
 
-| Path                      | Holds                                                                                                                                                                                          |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/core/`               | The data model (`model.ts`: types, `validate`, `derive`), labels, `changelog`, `audit`, map loading. No Svelte; runs in Node and the browser. It is what map files import as `onboarding-map`. |
-| `src/cli/`                | The `onboarding-map` command (citty): `init`, `dev`, `build`, `validate`, `changelog`, `audit`, `schema`, `skills install`.                                                                    |
-| `src/routes/`, `src/lib/` | The app: a static shell that fetches `map.json` at runtime and renders it.                                                                                                                     |
-| `templates/`              | Maps that `init --template` copies. `starter` is minimal; `physics` is a complete example outside software.                                                                                    |
-| `skills/`                 | **Product, not instructions for working here.** Skills shipped to map authors' coding agents by `init` and `skills install`.                                                                   |
-| `tools/`                  | Visual regression: `shoot.mjs` screenshots two served builds, `diff.mjs` pixel-diffs them.                                                                                                     |
+| Path                      | Holds                                                                                                                                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/core/`               | The data model (`model.ts`: types, `validate`, `derive`), labels, `changelog`, `audit`, map loading. No Svelte; runs in Node and the browser. It is what map files import as `onboarding-map`.                      |
+| `src/cli/`                | The `onboarding-map` command (citty): `init`, `dev`, `build`, `validate`, `changelog`, `audit`, `schema`, `skills install`.                                                                                         |
+| `src/routes/`, `src/lib/` | The app: a static shell that fetches `map.json` at runtime and renders it.                                                                                                                                          |
+| `templates/`              | Maps that `init --template` copies. `starter` is minimal; `physics` is a complete example outside software.                                                                                                         |
+| `skills/`                 | **Product, not instructions for working here.** Skills shipped to map authors' coding agents by `init` and `skills install`, into `.claude/skills`, `.agents/skills` and/or `.codex/skills` (`src/cli/targets.ts`). |
+| `tools/`                  | Visual regression: `shoot.mjs` screenshots two served builds, `diff.mjs` pixel-diffs them.                                                                                                                          |
 
 `npm run build` compiles `src/core` + `src/cli` with `tsc` to `dist/core` and `dist/cli`, generates
 `schema/map.schema.json` from `OnboardingMap`, and builds the shell to `dist/app`. The CLI copies
@@ -95,6 +95,11 @@ release-please keeps a release PR (`chore(main): release x.y.z`) open with the n
 `CHANGELOG.md`. Merging it tags the release and the `Release` workflow publishes to npm with
 Trusted Publishing — no token exists. Do not tag, bump `version`, edit `CHANGELOG.md` or run
 `npm publish` by hand.
+
+Only `feat`, `fix`, `perf`, `refactor`, `revert` and `deps` commits cause a release; the other
+types land without one. When release-please updates its PR, GitHub holds that PR's check runs as
+"action required" until a maintainer approves them (Actions → the run → "Approve workflows to
+run"). A release PR whose checks show as waiting is not failing; ask the maintainer to approve.
 
 ## Verifying a change
 
