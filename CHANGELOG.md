@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.0](https://github.com/ChidiRnweke/onboarding-map/compare/v0.4.0...v0.5.0) (2026-09-27)
+
+
+### Features
+
+* **docs:** add a Starlight documentation site on GitHub Pages ([#12](https://github.com/ChidiRnweke/onboarding-map/issues/12)) ([cb4b23a](https://github.com/ChidiRnweke/onboarding-map/commit/cb4b23a81eef965bbf991636b67bffef3ff653fc))
+
 ## [0.4.0](https://github.com/ChidiRnweke/onboarding-map/compare/v0.3.0...v0.4.0) (2026-09-27)
 
 
