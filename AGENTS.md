@@ -5,9 +5,6 @@ route through it, walked in stages of do → observe → read. A user's project 
 (`map.ts` or `map.json`); the package's CLI validates it and serves or builds it next to a prebuilt
 SvelteKit shell. See `README.md` for the user-facing side.
 
-`node` is not on `PATH` by default — prepend `~/.nvm/versions/node/v24.21.0/bin` before any `npm`
-or `npx` command.
-
 ## Where things live
 
 | Path                      | Holds                                                                                                                                                                                                               |
